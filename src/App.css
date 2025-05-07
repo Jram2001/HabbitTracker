@@ -1,0 +1,44 @@
+.app-container {
+  display: flex;
+  place-content: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.app-container,
+.content {
+  display: flex;
+  place-content: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Animation classes */
+.fadeIn {
+  animation: fadeIn 1s ease-in forwards;
+}
+
+.fadeOut {
+  animation: fadeOut 1s ease-out forwards;
+}
