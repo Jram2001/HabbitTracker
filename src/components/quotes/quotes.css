@@ -1,6 +1,6 @@
 .quote-content {
     max-height: 100%;
-    color: #A25C00;
+    color: var(--complimentary-color);
     max-width: 700px;
     font-size: 32px;
     font-family: var(--accent-font-family);

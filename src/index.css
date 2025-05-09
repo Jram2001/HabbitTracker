@@ -1,6 +1,12 @@
 :root {
-  --primary-color: #FFF2E1;
+  --primary-color: #F7F3EB;
+  --complimentary-color: #FACB86;
+  --secondary-color: #ffffff;
   --accent-font-family: "Rancho";
+  --error-color: #ff6b6b;
+  --border-color: #e2e2e2;
+  --text-color: #555555;
+  --placeholder-color: #9ca3af;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;

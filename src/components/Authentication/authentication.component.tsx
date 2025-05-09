@@ -1,34 +1,65 @@
-import React from "react";
-import './authentication.css'
-const AuthenticationComponent = () => {
-    return (
-        <>
-            <div className="input-wrapper">
-                <div className="input-icon-container">
-                    <input
-                        id="small-input"
-                        type="text"
-                        placeholder="Enter your name"
-                        className="small-input with-icon"
-                    />
-                    <span className="input-icon">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="icon-svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                d="M5.121 17.804A13.937 13.937 0 0112 15c2.21 0 4.284.534 6.121 1.477M15 10a3 3 0 11-6 0 3 3 0 016 0z"
-                            />
-                        </svg>
-                    </span>
-                </div>
+// import React from "react";
+// import './authentication.css'
+// const AuthenticationComponent = () => {
+//     return (
+//         <>
 
-            </div>
-        </>
-    )
-}
+//         </>
+//     )
+// }
+
+// export default AuthenticationComponent;
+
+// MyForm.tsx
+import { useForm, FormProvider, type SubmitHandler } from "react-hook-form";
+import CustomInput from "../custom/custom-input/custom-input";
+
+type FormValues = {
+    email: string;
+    password: string;
+};
+
+const AuthenticationComponent = () => {
+    const methods = useForm<FormValues>({
+        mode: "onTouched",
+        defaultValues: {
+            email: "",
+            password: ""
+        }
+    });
+
+    const onSubmit: SubmitHandler<FormValues> = (data) => {
+        console.log(data);
+    };
+
+    return (
+        <FormProvider {...methods}>
+            <form
+                onSubmit={methods.handleSubmit(onSubmit)}
+                className="max-w-md mx-auto"
+            >
+                <CustomInput
+                    name="email"
+                    label="Email"
+                    validationOptions={{ required: "Email is required" }}
+                    placeHolder="you@example.com"
+                />
+                <CustomInput
+                    name="password"
+                    label="Password"
+                    type="password"
+                    validationOptions={{ required: "Password is required", minLength: { value: 6, message: "Min 6 characters" } }}
+                    placeHolder="Enter password"
+                />
+                <button
+                    type="submit"
+                    className="bg-blue-600 text-white px-4 py-2 mt-4 rounded"
+                >
+                    Submit
+                </button>
+            </form>
+        </FormProvider>
+    );
+};
 
 export default AuthenticationComponent;
