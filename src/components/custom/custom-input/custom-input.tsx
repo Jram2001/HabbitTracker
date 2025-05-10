@@ -27,17 +27,27 @@ const CustomInput: React.FC<CustomInputProps> = ({
                 </label>
             )}
             <div className="custom-input__field-container">
-                <input
-                    id={name}
-                    type={type}
-                    {...register(name, validationOptions)}
-                    placeholder={placeHolder}
-                    className={`custom-input__field ${fieldError ? "custom-input__field--error" : ""}`}
-                />
+                <div className="input-wrapper">
+                    <input
+                        id={name}
+                        type={type}
+                        {...register(name, validationOptions)}
+                        placeholder={placeHolder}
+                        style={{ borderColor: fieldError ? "var(--error-color) !important" : "var(--border-color) !important" }}
+                        className={`custom-input__field input-field ${fieldError ? "custom-input__field--error" : ""}`}
+                    />
+                    <div className="error-icon-wrapper">
+                        <svg style={{ cursor: "pointer", display: fieldError ? "block" : "none" }} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="var(--error-color)" className="size-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                        </svg>
+                        <div className="tooltip"><p className="custom-input__error">{fieldError}</p></div>
+                    </div>
+                </div>
             </div>
-            {fieldError && <p className="custom-input__error">{fieldError}</p>}
         </div>
     );
 }
 
 export default CustomInput;
+
+

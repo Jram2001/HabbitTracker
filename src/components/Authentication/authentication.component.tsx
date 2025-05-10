@@ -13,6 +13,7 @@
 // MyForm.tsx
 import { useForm, FormProvider, type SubmitHandler } from "react-hook-form";
 import CustomInput from "../custom/custom-input/custom-input";
+import './authentication.css';
 
 type FormValues = {
     email: string;
@@ -33,32 +34,35 @@ const AuthenticationComponent = () => {
     };
 
     return (
-        <FormProvider {...methods}>
-            <form
-                onSubmit={methods.handleSubmit(onSubmit)}
-                className="max-w-md mx-auto"
-            >
-                <CustomInput
-                    name="email"
-                    label="Email"
-                    validationOptions={{ required: "Email is required" }}
-                    placeHolder="you@example.com"
-                />
-                <CustomInput
-                    name="password"
-                    label="Password"
-                    type="password"
-                    validationOptions={{ required: "Password is required", minLength: { value: 6, message: "Min 6 characters" } }}
-                    placeHolder="Enter password"
-                />
-                <button
-                    type="submit"
-                    className="bg-blue-600 text-white px-4 py-2 mt-4 rounded"
+        <div className="authentication-container">
+            <div className="header">Sign in</div>
+            <FormProvider {...methods}>
+                <form
+                    onSubmit={methods.handleSubmit(onSubmit)}
+                    className="max-w-md mx-auto authentication-form"
                 >
-                    Submit
-                </button>
-            </form>
-        </FormProvider>
+                    <CustomInput
+                        name="email"
+                        validationOptions={{ required: "Email is required" }}
+                        placeHolder="you@example.com"
+                    />
+                    <CustomInput
+                        name="password"
+                        type="password"
+                        validationOptions={{ required: "Password is required", minLength: { value: 6, message: "Min 6 characters" } }}
+                        placeHolder="Enter password"
+                    />
+                    <div className="authentication-button">
+                        <button type="submit" className="signin">
+                            Submit
+                        </button>
+                        <button type="submit" className="signup">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </FormProvider>
+        </div>
     );
 };
 
