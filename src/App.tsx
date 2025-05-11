@@ -3,16 +3,16 @@ import { useEffect, useState } from 'react';
 import QuotesComponent from './components/quotes/quotes.component';
 import AuthenticationComponent from './components/Authentication/authentication.component';
 import { Route, Routes, useLocation } from 'react-router-dom';
-
+import SignupComponent from './components/Authentication/signup/signup.component';
+import Home from './components/Home/home.component';
 const App = () => {
   const location = useLocation();
   const [displayLocation, setDisplayLocation] = useState(location);
   const [transitionStage, setTransitionStage] = useState("fadeIn");
-
+  const appWrapper = document.querySelector('.app-container');
   const scaleBody = () => {
-    console.log('hello');
-    document.body.style.transform = `scale(${window.innerWidth / 1440})`;
-    document.body.style.transformOrigin = 'top left';
+    if (appWrapper instanceof HTMLElement)
+      appWrapper.style.transform = `scale(${window.innerWidth / 1440})`;
   }
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const App = () => {
     return () => {
       window.removeEventListener('resize', scaleBody);
     };
-  }, []); 
+  }, []);
 
   useEffect(() => {
     if (location !== displayLocation) {
@@ -43,6 +43,8 @@ const App = () => {
         <Routes location={displayLocation}>
           <Route path="/" element={<QuotesComponent />} />
           <Route path="/authenticate" element={<AuthenticationComponent />} />
+          <Route path="/signup" element={<SignupComponent />} />
+          <Route path="/home" element={<Home />} />
         </Routes>
       </div>
     </div>

@@ -12,15 +12,15 @@
 
 // MyForm.tsx
 import { useForm, FormProvider, type SubmitHandler } from "react-hook-form";
-import CustomInput from "../custom/custom-input/custom-input";
-import './authentication.css';
+import CustomInput from "../../custom/custom-input/custom-input";
+import '../authentication.css';
 
 type FormValues = {
     email: string;
     password: string;
 };
 
-const AuthenticationComponent = () => {
+const SignupComponent = () => {
     const methods = useForm<FormValues>({
         mode: "onTouched",
         defaultValues: {
@@ -35,12 +35,17 @@ const AuthenticationComponent = () => {
 
     return (
         <div className="authentication-container">
-            <div className="header">Sign in</div>
+            <div className="header">Sign up</div>
             <FormProvider {...methods}>
                 <form
                     onSubmit={methods.handleSubmit(onSubmit)}
                     className="max-w-md mx-auto authentication-form"
                 >
+                    <CustomInput
+                        name="userName"
+                        validationOptions={{ required: "user name is required" }}
+                        placeHolder="User name"
+                    />
                     <CustomInput
                         name="email"
                         validationOptions={{ required: "Email is required" }}
@@ -52,12 +57,15 @@ const AuthenticationComponent = () => {
                         validationOptions={{ required: "Password is required", minLength: { value: 6, message: "Min 6 characters" } }}
                         placeHolder="Enter password"
                     />
+                    <CustomInput
+                        name="conformPassword"
+                        type="password"
+                        validationOptions={{ required: "Password is required", minLength: { value: 6, message: "Min 6 characters" } }}
+                        placeHolder="Conform password"
+                    />
                     <div className="authentication-button">
-                        <button type="submit" className="signin">
+                        <button style={{ width: '100%' }} type="submit" className="signin">
                             Submit
-                        </button>
-                        <button type="submit" className="signup">
-                            Sign up
                         </button>
                     </div>
                 </form>
@@ -66,4 +74,4 @@ const AuthenticationComponent = () => {
     );
 };
 
-export default AuthenticationComponent;
+export default SignupComponent;
