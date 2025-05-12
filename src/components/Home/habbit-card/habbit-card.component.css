@@ -1,10 +1,10 @@
 .habbit-card-container {
     width: 300px;
     height: 250px;
-    background-color: #ffffff;
+    background-color: var(--primary-color);
     border-radius: var(--border-radius-container);
-    box-shadow: var(--default-shadow);
-    padding: 0.5rem;
+    box-shadow: var(--card-box-shadow);
+    padding: 1rem;
 }
 
 .card-icon {
@@ -16,11 +16,15 @@
     width: 2rem;
     border-radius: 50%;
     background-color: var(--primary-color);
-    border: 1px solid var(--border-color);
 }
 
-.habbit-icon {
-    border-radius: 50%;
+.habbit-name {
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.markAsFinished {
     width: 1rem;
     height: 1rem;
 }

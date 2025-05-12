@@ -13,6 +13,7 @@
   --default-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   --border-radius-container: 0.4rem;
   --border-radius-children: 0.2rem;
+  --card-box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;

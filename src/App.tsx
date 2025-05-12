@@ -12,7 +12,7 @@ const App = () => {
   const appWrapper = document.querySelector('.app-container');
   const scaleBody = () => {
     if (appWrapper instanceof HTMLElement)
-      appWrapper.style.transform = `scale(${window.innerWidth / 1440})`;
+      document.body.style.transform = `scale(${window.innerWidth / 1440})`;
   }
 
   useEffect(() => {
