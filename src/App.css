@@ -2,8 +2,11 @@
   box-sizing: border-box;
   display: flex;
   place-content: center;
-  width: 1440px;
-  height: 100vh;
+  height: 100%;
+}
+
+#root {
+  height: 100%;
 }
 
 /* Animation keyframes */
@@ -29,11 +32,11 @@
 
 .app-container,
 .content {
+  transform-origin: top left;
   display: flex;
   place-content: center;
   width: 1440px;
   overflow: hidden;
-  height: 100vh;
 }
 
 /* Animation classes */

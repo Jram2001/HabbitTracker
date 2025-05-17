@@ -1,8 +1,15 @@
 import type React from "react";
 import "./habbit-card.component.css"
 import ActionsDropdown from "./actions-dropdown/actions.component";
+import ActivityBox from "./activity-box/activity.component";
+import { useState } from "react";
 
-const HabbitCard: React.FC = () => {
+type cardInputProps = {
+    weeklyActivity: number[];
+    activityId: number
+}
+
+const HabbitCard: React.FC<cardInputProps> = ({ weeklyActivity, activityId }) => {
     return (
         <>
             <div className="habbit-card-container">
@@ -16,6 +23,10 @@ const HabbitCard: React.FC = () => {
                         </td>
                     </tr>
                 </table>
+
+                <div className="activity-status-container">
+                    <ActivityBox userActivity={weeklyActivity} />
+                </div>
             </div>
         </>
     )

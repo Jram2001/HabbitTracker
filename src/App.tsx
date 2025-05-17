@@ -9,10 +9,14 @@ const App = () => {
   const location = useLocation();
   const [displayLocation, setDisplayLocation] = useState(location);
   const [transitionStage, setTransitionStage] = useState("fadeIn");
-  const appWrapper = document.querySelector('.app-container');
   const scaleBody = () => {
-    if (appWrapper instanceof HTMLElement)
-      document.body.style.transform = `scale(${window.innerWidth / 1440})`;
+    const element = document.querySelector('.app-container');
+    if (element) {
+      console.log(window.screen.width, window.screen.height);
+      document.body.style.transform = `scale(${window.screen.width / 1440})`;
+      document.body.style.height = window.screen.height * (window.screen.height / window.screen.width) + 'px';
+      // (element as HTMLElement).style.transform = `scale(${window.screen.width / 1440})`;
+    }
   }
 
   useEffect(() => {
