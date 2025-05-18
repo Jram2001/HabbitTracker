@@ -1,11 +1,12 @@
 import type React from "react";
 import HabbitCard from "./habbit-card/habbit-card.component";
 import RepetingTodo from "./repeting-todo/repetingTodo.component";
-import "./home.component.css"
+import "./home.component.scss"
 import WelcomeUser from "./welcom-section/welcome.component";
 import { useState } from "react";
 const Home: React.FC = ({ }) => {
-    const [allUserActivity, setAllUserActivity] = useState([[1, 1, 1, 1, 0, 0, 0], [1, 1, 0, 0, 1, 1, 1], [0, 1, 1, 0, 1, 1, 1], [0, 0, 1, 1, 0, 1, 1], [1, 1, 1, 1, 0, 0, 0], [1, 1, 0, 0, 1, 1, 1], [1, 1, 1, 1, 0, 0, 0], [1, 1, 0, 0, 1, 1, 1], [0, 1, 1, 0, 1, 1, 1], [0, 0, 1, 1, 0, 1, 1], [1, 1, 1, 1, 0, 0, 0], [1, 1, 0, 0, 1, 1, 1]])
+    const [allUserActivity, setAllUserActivity] = useState([[1, 1, 1, 1, 0, 0, 0], [1, 1, 0, 0, 1, 1, 1], [0, 1, 1, 0, 1, 1, 1], [0, 0, 1, 1, 0, 1, 1], [1, 1, 1, 1, 0, 0, 0], [1, 1, 0, 0, 1, 1, 1], [1, 1, 1, 1, 0, 0, 0], [1, 1, 0, 0, 1, 1, 1], [0, 1, 1, 0, 1, 1, 1], [0, 0, 1, 1, 0, 1, 1], [1, 1, 1, 1, 0, 0, 0], [1, 1, 0, 0, 1, 1, 1]]);
+    const [hovredIndex, setHovredIndex] = useState<number | null>(null);
 
     return (
         <>
@@ -15,11 +16,13 @@ const Home: React.FC = ({ }) => {
                     <RepetingTodo />
                 </div>
                 <div className="grid-layout-2">
-                    {allUserActivity.map((activity) => {
-                        return <HabbitCard weeklyActivity={activity} activityId={1} />
+                    {allUserActivity.map((activity, index) => {
+                        return <HabbitCard
+                            weeklyActivity={activity}
+                            activityId={index}
+                            isActive={index == hovredIndex}
+                        />
                     })}
-                </div>
-                <div className="grid-layout-3">
                 </div>
             </div>
         </>

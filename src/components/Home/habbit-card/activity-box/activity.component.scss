@@ -14,6 +14,8 @@
 }
 
 .activity-container {
+    width: 100%;
+    flex-wrap: wrap;
     display: flex;
     flex-direction: row;
     gap: 5px;

@@ -33,7 +33,7 @@
 .habbit-name {
     color: var(--text-color);
     font-weight: 600;
-    font-size: 1.5rem;
+    font-size: 1rem;
 }
 
 .markAsFinished {
@@ -50,7 +50,31 @@
     justify-content: center;
 }
 
-.habbit-card-container:hover {
+.habbit-card-container-mock {
+    width: 300px;
+    position: relative;
+}
+
+.card-expand-bottom {
+    position: absolute;
     width: calc(600px + 0.5rem);
+    height: 204px;
+    z-index: 2;
+}
+
+.card-expand-top {
+    position: absolute;
+    width: calc(600px + 0.5rem);
+    transform: translateY(-50%);
+    height: 204px;
+    z-index: 2;
+}
+
+.card-expand-left {
+    position: absolute;
+    width: calc(600px + 0.5rem);
+    transform-origin: right center;
+    transform: translateX(calc(-50% - 0.25rem));
     height: 200px;
+    z-index: 2;
 }
