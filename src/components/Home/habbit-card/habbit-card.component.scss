@@ -1,0 +1,110 @@
+/* Base styles with combined properties */
+.habbit-card-container {
+    --transition-speed: 0.1s;
+    position: relative;
+    width: 300px;
+    height: fit-content;
+    padding: 1rem;
+    background-color: var(--car-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-container);
+    box-sizing: border-box;
+    overflow: hidden;
+    cursor: pointer;
+    transform-origin: right;
+    transition: all var(--transition-speed) ease-in;
+}
+
+/* Hover state - more efficient selectors */
+.habbit-card-container:hover {
+    justify-content: space-around;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.habbit-card-container:hover .circle-graph-container {
+    display: block;
+    position: relative;
+    height: 100px;
+    width: 100px;
+    transform: none;
+}
+
+/* Active state - simplified box-shadow */
+.habbit-card-container:active {
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Card elements with optimized properties */
+.card-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2rem;
+    width: 2rem;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+}
+
+.habbit-name {
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.markAsFinished {
+    width: 1rem;
+    height: 1rem;
+}
+
+.activity-status-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    height: fit-content;
+    padding: 0.5rem 0;
+}
+
+/* Card expansion positioning - consolidated properties */
+.habbit-card-container-mock {
+    width: 300px;
+    position: relative;
+}
+
+/* Combined positioning properties and consistent dimensions */
+.card-expand-bottom,
+.card-expand-top,
+.card-expand-left {
+    position: absolute;
+    width: calc(600px + 0.5rem);
+    z-index: 2;
+}
+
+.card-expand-bottom {
+    height: 204px;
+}
+
+.card-expand-top {
+    height: 204px;
+    transform: translateY(-50%);
+}
+
+.card-expand-left {
+    height: 200px;
+    transform-origin: right center;
+    transform: translateX(calc(-50% - 0.25rem));
+}
+
+.circle-graph-container {
+    aspect-ratio: 1/1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    transform: translate(-30%, 50%);
+}
+
+.activity-content-container {
+    display: flex;
+    justify-content: space-between;
+}

@@ -1,8 +1,9 @@
 import type React from "react";
-import "./habbit-card.component.css"
+import "./habbit-card.component.scss"
 import ActionsDropdown from "./actions-dropdown/actions.component";
 import ActivityBox from "./activity-box/activity.component";
 import { useEffect, useRef, useState } from "react";
+import CircleGraph from "./simpleCircleGraph/circle-graph";
 
 type cardInputProps = {
     weeklyActivity: number[];
@@ -100,9 +101,13 @@ const HabbitCard: React.FC<cardInputProps> = ({ weeklyActivity, activityId, isAc
                             </tr>
                         </tbody>
                     </table>
-
-                    <div className="activity-status-container">
-                        <ActivityBox userActivity={isHovred ? yearlyActivity : weeklyActivity} />
+                    <div className="activity-content-container">
+                        <div className="activity-status-container">
+                            <ActivityBox userActivity={isHovred ? yearlyActivity : weeklyActivity} />
+                        </div>
+                        <div className="circle-graph-container">
+                            <CircleGraph />
+                        </div>
                     </div>
                 </div>
             </div>

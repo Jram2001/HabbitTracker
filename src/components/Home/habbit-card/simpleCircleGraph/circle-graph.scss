@@ -1,0 +1,60 @@
+@keyframes growHeight {
+    from {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 0;
+        width: 0;
+    }
+
+    to {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 100%;
+        width: 100%
+    }
+}
+
+.circle-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+
+    &.animate-graph {
+        animation: growHeight 0.8s ease-out forwards;
+    }
+
+    .outer-circle {
+        max-width: 98%;
+        max-height: 98%;
+        border-radius: 50%;
+        background-color: var(--text-color);
+        opacity: 0.1;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        &.animate-graph {
+            animation: growHeight 0.5s ease-in forwards;
+        }
+    }
+
+    .inner-circle {
+        max-width: 50%;
+        max-height: 50%;
+        border-radius: 50%;
+        background-color: var(--text-color);
+        animation-delay: 0.1s;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        &.animate-graph {
+            animation: growHeight 0.5s ease-in forwards;
+        }
+    }
+}
