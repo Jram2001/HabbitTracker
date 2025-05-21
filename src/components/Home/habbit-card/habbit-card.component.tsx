@@ -80,9 +80,16 @@ const HabbitCard: React.FC<cardInputProps> = ({ weeklyActivity, activityId, isAc
         setIsHovred(false);
     };
 
+    const findGraphData = (valuesArray: number[]): number => {
+        return ((valuesArray.reduce((accumulator: number, value: number) => {
+            return accumulator + value;
+        }) / valuesArray.length) * 100)
+    }
+
     return (
         <>
             <div
+                title="Click to mark as completed"
                 className={`habbit-card-container-mock`}
                 ref={cardReference}
                 onMouseEnter={handleMouseEnter}
@@ -106,7 +113,7 @@ const HabbitCard: React.FC<cardInputProps> = ({ weeklyActivity, activityId, isAc
                             <ActivityBox userActivity={isHovred ? yearlyActivity : weeklyActivity} />
                         </div>
                         <div className="circle-graph-container">
-                            <CircleGraph />
+                            <CircleGraph width={findGraphData(yearlyActivity)} />
                         </div>
                     </div>
                 </div>

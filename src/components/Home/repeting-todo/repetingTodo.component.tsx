@@ -13,7 +13,8 @@ const RepetingTodo: React.FC = ({ }) => {
                     <img src="/src/assets/todos.png" alt="" />
                 </div>
                 {repetingTodo.map((todo) => {
-                    return <div className="todo-contant">{todo}</div>
+                    return <div title="Click to mark as completed"
+                        className="todo-contant">{todo}</div>
                 })}
             </div>
         </>

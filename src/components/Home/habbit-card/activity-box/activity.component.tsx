@@ -6,7 +6,7 @@ const ActivityBox: React.FC<{ userActivity: number[] }> = ({ userActivity }) => 
         <>
             <div className="activity-container">
                 {userActivity.map((activity: number) => {
-                    return <div className={activity == 1 ? 'active' : 'in-active'}></div>
+                    return <div className={`animate-in ${activity == 1 ? 'active' : 'in-active'}`}></div>;
                 })}
             </div>
         </>

@@ -19,4 +19,21 @@
     display: flex;
     flex-direction: row;
     gap: 5px;
+
+    .animate-in {
+        animation: fadeSlideIn 0.5s ease-out forwards;
+    }
+}
+
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }

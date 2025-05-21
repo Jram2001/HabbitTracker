@@ -1,9 +1,9 @@
 /* Base styles with combined properties */
 .habbit-card-container {
-    --transition-speed: 0.1s;
+    --transition-speed: 0.2s;
     position: relative;
     width: 300px;
-    height: fit-content;
+    height: 95px;
     padding: 1rem;
     background-color: var(--car-background-color);
     border: 1px solid var(--border-color);
@@ -13,6 +13,7 @@
     cursor: pointer;
     transform-origin: right;
     transition: all var(--transition-speed) ease-in;
+    overflow: hidden;
 }
 
 /* Hover state - more efficient selectors */
@@ -85,7 +86,7 @@
 }
 
 .card-expand-top {
-    height: 204px;
+    height: 200px;
     transform: translateY(-50%);
 }
 
