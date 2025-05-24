@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const habbitRouter = require('./habbit')
 
-router.use('/habbits', habbitRouter)
+
+router.get('/getActivity', (req, res) => {
+    res.send('Habbit activity');
+});
 module.exports = router;
