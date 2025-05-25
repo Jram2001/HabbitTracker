@@ -14,7 +14,6 @@
 import { useForm, FormProvider, type SubmitHandler } from "react-hook-form";
 import CustomInput from "../../custom/custom-input/custom-input";
 import '../authentication.css';
-
 type FormValues = {
     email: string;
     password: string;

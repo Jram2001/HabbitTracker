@@ -1,7 +1,7 @@
 // Import necessary dependencies
-const models = require('../../models/user');  // User model to interact with the database
+const models = require('../models/user-model');  // User model to interact with the database
 const util = require('../util/util');  // Utility function to get user by email
-const constant = require('../../constant/constant');  // Constant values like regex patterns
+const constant = require('../constant/constant');  // Constant values like regex patterns
 const bcrypt = require('bcrypt');  // Library for hashing passwords
 const jwt = require('jsonwebtoken');
 
@@ -91,9 +91,8 @@ module.exports.validateUser = async (req, res) => {
 
         // If authentication is successful, send a success response
         res.status(200).json({ message: 'User validated successfully', token: token, userId: userData.id, profilePicture: userData.profilePicture });
-    } catch (error) {
+    } catch (err) {
         // Handle server-side errors and send an error response
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: `Internal server error ${err}` });
     }
 }

@@ -14,7 +14,7 @@
 import { useForm, FormProvider, type SubmitHandler } from "react-hook-form";
 import CustomInput from "../custom/custom-input/custom-input";
 import './authentication.css';
-
+import { get, post } from "../../services/api-mothod-service";
 type FormValues = {
     email: string;
     password: string;
@@ -30,7 +30,8 @@ const AuthenticationComponent = () => {
     });
 
     const onSubmit: SubmitHandler<FormValues> = (data) => {
-        console.log(data);
+        // get('/test');
+        post('/user/authenticate', data);
     };
 
     return (

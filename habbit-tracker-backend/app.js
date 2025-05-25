@@ -3,14 +3,16 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const cors = require('cors');
+require('dotenv').config();
 
 var indexRouter = require('./routes/index');
 // var usersRouter = require('./routes/users');
 const mongoose = require('mongoose');
-
+const PORT = process.env.PORT || 3001;
 
 var app = express();
-const mongooseURI = "mongodb://localhost:27017/habbit-tracker"
+const mongooseURI = process.env.MONGO_URI;
 
 // Connect to mongo db 
 mongoose.connect(mongooseURI, {})
@@ -20,7 +22,7 @@ mongoose.connect(mongooseURI, {})
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
+app.use(cors({}));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -34,6 +36,10 @@ app.use('/', indexRouter);
 app.use(function (req, res, next) {
   next(createError(404));
 });
+
+// app.listen(PORT, () => {
+//   console.log(`Server is listning at port ${PORT}`);
+// })
 
 // error handler
 app.use(function (err, req, res, next) {

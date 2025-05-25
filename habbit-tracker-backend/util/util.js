@@ -1,4 +1,6 @@
 const Models = require('../models/user-model');
+const jwt = require('jsonwebtoken');
+const SECRENT_TOKEN = process.env.JWT_SECRET_TOKEN;
 
 /**
  * Utility function to get a user by user ID.
