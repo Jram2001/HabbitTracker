@@ -31,7 +31,12 @@ const AuthenticationComponent = () => {
 
     const onSubmit: SubmitHandler<FormValues> = (data) => {
         // get('/test');
-        post('/user/authenticate', data);
+        post('/authenticate', data).then(response => {
+            console.log('✅ Success:', response.data);
+        })
+            .catch(error => {
+                console.error('❌ Error:', error.response ? error.response.data : error.message);
+            });;
     };
 
     return (

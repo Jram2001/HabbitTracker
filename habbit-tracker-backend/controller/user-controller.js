@@ -63,6 +63,7 @@ module.exports.getOneUser = async (req, res) => {
  */
 module.exports.validateUser = async (req, res) => {
     const request = req.body;
+    console.log('CALLED')
     try {
         // Check if email and password are provided
         if (!request.email && !request.password) {
