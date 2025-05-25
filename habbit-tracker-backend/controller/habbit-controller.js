@@ -125,20 +125,20 @@ module.exports.updateActivityStatus = async (req, res) => {
             });
         }
 
-        const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+        const today = new Date().toISOString().split('T')[0];
         const activity = habbit.activity || [];
 
         const lastEntry = activity[activity.length - 1];
         const lastDate = lastEntry ? new Date(lastEntry).toISOString().split('T')[0] : null;
 
         if (lastDate === today) {
-            activity.pop(); // Uncheck today
+            activity.pop();
         } else {
-            activity.push(new Date()); // Check today
+            activity.push(new Date());
         }
 
         habbit.activity = activity;
-        await habbit.save(); // Persist the update
+        await habbit.save();
 
         return res.status(200).json({
             success: true,
