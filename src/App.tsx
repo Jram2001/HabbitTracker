@@ -5,6 +5,8 @@ import AuthenticationComponent from './components/Authentication/authentication.
 import { Route, Routes, useLocation } from 'react-router-dom';
 import SignupComponent from './components/Authentication/signup/signup.component';
 import Home from './components/Home/home.component';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './guards/protected-route';
 const App = () => {
   const location = useLocation();
   const [displayLocation, setDisplayLocation] = useState(location);
@@ -44,12 +46,16 @@ const App = () => {
           }
         }}
       >
-        <Routes location={displayLocation}>
-          <Route path="/" element={<QuotesComponent />} />
-          <Route path="/authenticate" element={<AuthenticationComponent />} />
-          <Route path="/signup" element={<SignupComponent />} />
-          <Route path="/home" element={<Home />} />
-        </Routes>
+        <AuthProvider>
+          <Routes location={displayLocation}>
+            <Route path="/" element={<QuotesComponent />} />
+            <Route path="/authenticate" element={<AuthenticationComponent />} />
+            <Route path="/signup" element={<SignupComponent />} />
+            <Route element={<ProtectedRoute redirectPath="authenticate" />}>
+              <Route path="/home" element={<Home />} />
+            </Route>
+          </Routes>
+        </AuthProvider>
       </div>
     </div>
   )

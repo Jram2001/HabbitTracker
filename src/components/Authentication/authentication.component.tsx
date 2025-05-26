@@ -30,14 +30,16 @@ const AuthenticationComponent = () => {
     });
 
     const onSubmit: SubmitHandler<FormValues> = (data) => {
-        // get('/test');
-        post('/authenticate', data).then(response => {
-            console.log('✅ Success:', response.data);
-        })
+        post('/authenticate', data)
+            .then(response => {
+                const token = response?.data?.token || response; // Adjust depending on response structure
+                localStorage.setItem("authToken", token);
+            })
             .catch(error => {
-                console.error('❌ Error:', error.response ? error.response.data : error.message);
-            });;
+                console.error('❌ Error:', error?.response?.data || error.message);
+            });
     };
+
 
     return (
         <div className="authentication-container">
