@@ -1,5 +1,6 @@
 const Models = require('../models/habbit-model');
 const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Types;
 
 
 module.exports.getHabbitActivityStatus = async (req, res) => {
@@ -47,6 +48,53 @@ module.exports.getHabbitActivityStatus = async (req, res) => {
         });
     }
 }
+
+module.exports.getHabitActivityByUser = async (req, res) => {
+    try {
+        const { userId, limit } = req.query;
+        console.log('GET HABIT ACTIVITY BY USER CALLED', userId, limit);
+
+        if (!userId || !limit) {
+            return res.status(400).json({
+                success: false,
+                message: "Missing required fields"
+            });
+        }
+
+        // Since userId is a string, validate it like this:
+        if (typeof userId !== 'string' || userId.trim() === '') {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid user ID"
+            });
+        }
+
+        const habit = await Models.Habit.find(
+            { userId: userId },
+            { title: 1, activity: { $slice: parseInt(limit) }, _id: 0 }
+        );
+
+        console.log(habit, 'habbit');
+        if (!habit) {
+            return res.status(404).json({
+                success: false,
+                message: "Habit not found"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            data: habit
+        });
+
+    } catch (error) {
+        console.error('Error getting habit activity:', error);
+        return res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
+    }
+};
 
 module.exports.addNewHabbit = async (req, res) => {
     try {

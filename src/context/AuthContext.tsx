@@ -5,20 +5,7 @@ import React, {
     useEffect,
     type ReactNode
 } from 'react';
-// Assuming '../services/api-mothod-service' provides a 'post' function
-// For this example, we'll mock it or assume it's available.
-// If not provided, you would need to define a mock or actual post function.
-const post = async (url: string, data: any) => {
-    console.log(`Mock API call: POST ${url} with data:`, data);
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-    // Simulate a successful authentication response
-    if (data.email === 'test@example.com' && data.password === 'password') {
-        return { data: { token: 'mock-auth-token-123' } };
-    }
-    throw new Error('Invalid credentials');
-};
-
+import { post } from '../services/api-mothod-service';
 
 type Credentials = {
     email: string;
@@ -63,16 +50,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             return true;
         } catch (error: any) {
             console.error('Login Error:', error?.response?.data || error.message);
-            setAuthToken(null); // Clear authToken on error
+            setAuthToken(null);
             return false;
         }
     };
 
     const logout = () => {
-        setAuthToken(null); // Clear authToken in state
-        localStorage.removeItem('authToken'); // Remove authToken from localStorage
-        // Optionally, if there were other user-related items, remove them too.
-        // localStorage.removeItem('userProfile');
+        setAuthToken(null);
+        localStorage.removeItem('authToken');
     };
 
     return (

@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
+const { Schema, Types } = mongoose;
 
-const habitSchema = new mongoose.Schema({
+const habbitSchema = new mongoose.Schema({
     userId: {
-        type: String,
+        type: Types.ObjectId,
         required: true
     },
     title: {
@@ -21,9 +22,9 @@ const habitSchema = new mongoose.Schema({
     timestamps: true
 });
 
-const habbit = mongoose.model('Habit', habitSchema);
+const Habit = mongoose.model('Habit', habbitSchema);
 
 module.exports = {
-    Habbit,
+    Habit
 };
 

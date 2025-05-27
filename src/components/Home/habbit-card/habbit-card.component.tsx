@@ -9,10 +9,11 @@ type cardInputProps = {
     weeklyActivity: number[];
     activityId: number;
     isActive: boolean;
+    title: string
 }
 
 
-const HabbitCard: React.FC<cardInputProps> = ({ weeklyActivity, activityId, isActive }) => {
+const HabbitCard: React.FC<cardInputProps> = ({ weeklyActivity, activityId, isActive, title }) => {
     /** 
      * Ref to the card element used for layout measurements and DOM manipulation
      */
@@ -100,7 +101,7 @@ const HabbitCard: React.FC<cardInputProps> = ({ weeklyActivity, activityId, isAc
                         <tbody>
                             <tr>
                                 <td className="habbit-name">
-                                    Read {activityId}
+                                    {title}
                                 </td>
                                 <td style={{ display: "flex", justifyContent: "end" }}>
                                     <ActionsDropdown />

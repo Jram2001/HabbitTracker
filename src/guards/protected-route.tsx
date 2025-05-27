@@ -6,11 +6,10 @@ import { useAuth } from '../context/AuthContext';
 const ProtectedRoute = ({ redirectPath = '/login' }) => {
     const { authToken, loading } = useAuth();
 
-    if (!authToken) {
+    if (!authToken && !loading) {
         return <Navigate to={redirectPath} replace />;
     }
 
-    // If authenticated, render the child routes or content
     return <Outlet />;
 };
 
