@@ -6,26 +6,21 @@ import WelcomeUser from "./welcom-section/welcome.component";
 import { useEffect, useState } from "react";
 import { get } from "../../services/api-mothod-service";
 import { fillDatesWithFlags } from "../../utils/util";
-import type { AlternativeActivityApiResponse } from "../../model/models";
+import type { ActivityData, AlternativeActivityApiResponse } from "../../model/models";
 
 const Home: React.FC = ({ }) => {
-    const [allUserActivity, setAllUserActivity] = useState([[1, 1, 1, 1, 0, 0, 0], [1, 1, 0, 0, 1, 1, 1], [0, 1, 1, 0, 1, 1, 1], [0, 0, 1, 1, 0, 1, 1], [1, 1, 1, 1, 0, 0, 0], [1, 1, 0, 0, 1, 1, 1], [1, 1, 1, 1, 0, 0, 0], [1, 1, 0, 0, 1, 1, 1], [0, 1, 1, 0, 1, 1, 1], [0, 0, 1, 1, 0, 1, 1], [1, 1, 1, 1, 0, 0, 0], [1, 1, 0, 0, 1, 1, 1]]);
+    const [allUserActivity, setAllUserActivity] = useState<ActivityData[]>();
 
     useEffect(() => {
-        const activityData = get('/habbits/getActivityByUser', { "userId": "68318d48493cd55bd1a13ef4", "limit": "7" }).then((response: AlternativeActivityApiResponse) => {
-            setAllUserActivity({
-                title: response?.data?.data?.title,
-                activityData: response?.data?.data?.map((activityData: any) => {
-                    return fillDatesWithFlags(activityData?.activity, 7)
-                })
-            });
+        get('/habbits/getActivityByUser', { "userId": "68318d48493cd55bd1a13ef4", "limit": "7" }).then((response: AlternativeActivityApiResponse) => {
+            setAllUserActivity(response?.data?.data);
         }).catch((error) => {
             console.error('Error in fetching activity data', error)
         });
     }, []);
 
     const [hovredIndex, setHovredIndex] = useState<number | null>(null);
-
+    console.log(allUserActivity, 'allUserActivity')
     return (
         <>
             <div className="home-container">
@@ -34,9 +29,11 @@ const Home: React.FC = ({ }) => {
                     <RepetingTodo />
                 </div>
                 <div className="grid-layout-2">
-                    {allUserActivity.map((activity, index) => {
+                    {allUserActivity?.map((activity, index) => {
                         return <HabbitCard
-                            weeklyActivity={activity}
+                            title={activity.title}
+                            weeklyActivity={fillDatesWithFlags(activity.activity, 7)}
+                            yearlyActivity={fillDatesWithFlags(activity.activity, 200)}
                             activityId={index}
                             isActive={index == hovredIndex}
                         />

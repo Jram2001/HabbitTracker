@@ -7,7 +7,5 @@ export interface AlternativeActivityApiResponse {
 
 export interface ActivityData {
     title: string;
-    activities: string[]; // Array of activity items
-    // If the structure is different and title is separate from activities:
-    // Or if it's just an array: ActivityItem[]
+    activity: string[];
 }
