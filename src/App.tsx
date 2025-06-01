@@ -7,6 +7,7 @@ import SignupComponent from './components/Authentication/signup/signup.component
 import Home from './components/Home/home.component';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './guards/protected-route';
+import { DialogProvider } from './providers/common-dialog-interface';
 const App = () => {
   const location = useLocation();
   const [displayLocation, setDisplayLocation] = useState(location);
@@ -47,14 +48,16 @@ const App = () => {
         }}
       >
         <AuthProvider>
-          <Routes location={displayLocation}>
-            <Route path="/" element={<QuotesComponent />} />
-            <Route path="/authenticate" element={<AuthenticationComponent />} />
-            <Route path="/signup" element={<SignupComponent />} />
-            <Route element={<ProtectedRoute redirectPath="authenticate" />}>
-              <Route path="/home" element={<Home />} />
-            </Route>
-          </Routes>
+          <DialogProvider>
+            <Routes location={displayLocation}>
+              <Route path="/" element={<QuotesComponent />} />
+              <Route path="/authenticate" element={<AuthenticationComponent />} />
+              <Route path="/signup" element={<SignupComponent />} />
+              <Route element={<ProtectedRoute redirectPath="authenticate" />}>
+                <Route path="/home" element={<Home />} />
+              </Route>
+            </Routes>
+          </DialogProvider>
         </AuthProvider>
       </div>
     </div>

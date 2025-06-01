@@ -47,3 +47,7 @@
 .fadeOut {
   animation: fadeOut 1s ease-out forwards;
 }
+
+.actions-icon {
+  cursor: pointer;
+}

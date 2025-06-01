@@ -5,6 +5,7 @@ type IconProps = {
     customClassName?: string;
     color?: string;
     strokeSize?: number;
+    iconSize?: number
 };
 
 // LifeBoatIcon
@@ -143,3 +144,17 @@ export const UploadIcon: FC<IconProps> = ({ customClassName = "", color = "#E4C0
         <path d="M11.47 1.72a.75.75 0 0 1 1.06 0l3 3a.75.75 0 0 1-1.06 1.06l-1.72-1.72V7.5h-1.5V4.06L9.53 5.78a.75.75 0 0 1-1.06-1.06l3-3ZM11.25 7.5V15a.75.75 0 0 0 1.5 0V7.5h3.75a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-9a3 3 0 0 1 3-3h3.75Z" />
     </svg>
 );
+
+
+export const EditIcon: FC<IconProps> = ({ customClassName = "", color = "#E4C087", iconSize = 24 }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill={color}
+        className={customClassName}
+        style={{ width: iconSize, height: iconSize }}
+    >
+        <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
+    </svg>
+);
+

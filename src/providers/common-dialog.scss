@@ -1,0 +1,262 @@
+// Common Dialog Styles
+// Following the pattern of provided CSS with variables and consolidated properties
+
+/* Dialog overlay and positioning */
+.dialog-overlay {
+    --transition-speed: 0.3s;
+    --backdrop-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--backdrop-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    transition: opacity var(--transition-speed) ease-in-out;
+    transform-origin: center;
+}
+
+/* Dialog container with shadow and animations */
+.dialog-container {
+    --container-padding: 1.5rem;
+    --container-max-width: 28rem;
+    background-color: var(--primary-color);
+    border-radius: 8px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    padding: var(--container-padding);
+    width: 100%;
+    max-width: var(--container-max-width);
+    box-sizing: border-box;
+    transform-origin: center;
+    transition: all var(--transition-speed) ease-in-out;
+}
+
+/* Dialog title styling */
+.dialog-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    margin-top: 0;
+    color: var(--text-color);
+    line-height: 1.4;
+}
+
+/* Dialog message content */
+.dialog-message {
+    margin-bottom: 1rem;
+    color: var(--text-color);
+    line-height: 1.5;
+    font-size: 0.875rem;
+}
+
+/* Input container with spacing */
+.dialog-input-container {
+    margin-bottom: 1.5rem;
+}
+
+.dialog-input-wrapper {
+    margin-bottom: 1rem;
+}
+
+.dialog-input-wrapper:last-child {
+    margin-bottom: 0;
+}
+
+/* Button container layout */
+.dialog-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+/* Base button styles with transitions */
+.dialog-button {
+    --button-transition: 0.2s;
+    --button-focus-ring: 2px;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    border: none;
+    transition: all var(--button-transition) ease-in-out;
+    outline: none;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Button hover effects */
+.dialog-button:hover {
+    transform: translateY(-1px);
+}
+
+.dialog-button:active {
+    transform: translateY(0);
+}
+
+/* Cancel button styling */
+.dialog-button--cancel {
+    color: #374151;
+    background-color: #e5e7eb;
+}
+
+.dialog-button--cancel:hover {
+    background-color: #d1d5db;
+}
+
+.dialog-button--cancel:focus {
+    box-shadow: 0 0 0 var(--button-focus-ring) rgba(107, 114, 128, 0.5);
+}
+
+/* Confirm/Submit button styling */
+.dialog-button--confirm {
+    color: white;
+    background-color: #2563eb;
+}
+
+.dialog-button--confirm:hover {
+    background-color: #1d4ed8;
+}
+
+.dialog-button--confirm:focus {
+    box-shadow: 0 0 0 var(--button-focus-ring) rgba(59, 130, 246, 0.5);
+}
+
+/* Animation states following the provided pattern */
+.dialog-overlay.fadeIn {
+    animation: dialogFadeIn var(--transition-speed) ease-in forwards;
+}
+
+.dialog-overlay.fadeOut {
+    animation: dialogFadeOut var(--transition-speed) ease-out forwards;
+}
+
+.dialog-container.slideIn {
+    animation: dialogSlideIn var(--transition-speed) ease-out forwards;
+}
+
+.dialog-container.slideOut {
+    animation: dialogSlideOut var(--transition-speed) ease-in forwards;
+}
+
+/* Animation keyframes matching the provided style */
+@keyframes dialogFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes dialogFadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes dialogSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes dialogSlideOut {
+    from {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+}
+
+/* Responsive design - consolidated breakpoints */
+@media (max-width: 640px) {
+    .dialog-container {
+        margin: 1rem;
+        max-width: calc(100% - 2rem);
+        padding: 1.25rem;
+    }
+
+    .dialog-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .dialog-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .dialog-title {
+        font-size: 1.125rem;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .dialog-container {
+        border: 2px solid #374151;
+    }
+
+    .dialog-button--cancel {
+        border: 1px solid #6b7280;
+    }
+
+    .dialog-button--confirm {
+        border: 1px solid #1d4ed8;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+
+    .dialog-overlay,
+    .dialog-container,
+    .dialog-button {
+        transition: none;
+        animation: none;
+    }
+}
+
+/* Dark mode support */
+// @media (prefers-color-scheme: dark) {
+//     .dialog-container {
+//         background-color: #1f2937;
+//         color: #f9fafb;
+//     }
+
+//     .dialog-title {
+//         color: #f9fafb;
+//     }
+
+//     .dialog-message {
+//         color: #d1d5db;
+//     }
+
+//     .dialog-button--cancel {
+//         background-color: #374151;
+//         color: #d1d5db;
+//     }
+
+//     .dialog-button--cancel:hover {
+//         background-color: #4b5563;
+//     }
+// }

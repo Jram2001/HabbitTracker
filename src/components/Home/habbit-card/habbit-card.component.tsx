@@ -1,67 +1,128 @@
-import type React from "react";
-import "./habbit-card.component.scss"
+import React, { useEffect, useRef, useState } from "react";
+import { del, patch, post } from "../../../services/api-mothod-service";
+import { useDialog } from "../../../providers/common-dialog-interface";
+import { EditIcon, TrashIconSolid } from "../../icons.constants";
 import ActionsDropdown from "./actions-dropdown/actions.component";
 import ActivityBox from "./activity-box/activity.component";
-import { useEffect, useRef, useState } from "react";
 import CircleGraph from "./simpleCircleGraph/circle-graph";
+import "./habbit-card.component.scss";
 
-type cardInputProps = {
+type CardInputProps = {
     weeklyActivity: number[];
     yearlyActivity: number[];
-    activityId: number;
+    habitId: string;
     isActive: boolean;
-    title: string
-}
+    title: string;
+    updateUI: Function
+};
 
+/**
+ * Renders a habit tracking card with activity visualization and interaction
+ */
+const HabbitCard: React.FC<CardInputProps> = ({ weeklyActivity, habitId, isActive, yearlyActivity, title, updateUI }) => {
+    // State and refs
+    const cardReference = useRef<HTMLDivElement>(null); // Card element for DOM manipulation
+    const [isHovred, setIsHovred] = useState<boolean>(false); // Tracks hover state
+    const [expandClass, setExpandClass] = useState<string>(""); // Controls card expansion direction
+    const { openDialog, closeDialog } = useDialog(); // Dialog management hooks
 
-const HabbitCard: React.FC<cardInputProps> = ({ weeklyActivity, activityId, isActive, yearlyActivity, title }) => {
-    /** 
-     * Ref to the card element used for layout measurements and DOM manipulation
-     */
-    const cardReference = useRef<HTMLDivElement>(null);
-
-    const [isHovred, setIsHovred] = useState<boolean>(false);
-    // const [yearlyActivity, setYearlyActivity] = useState([0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1])
-    /** 
-     * Class name that controls the card's expansion direction (e.g., top, left, bottom)
-     */
-    const [expandClass, setExpandClass] = useState<string>("");
-
-    /**
-     * Sets the height of the card element based on the scaled height
-     * of its inner content ('.habbit-card-container'), adjusted relative
-     * to a 1440px screen width for consistent layout across screen sizes.
-     */
+    // Adjusts card height based on inner content and screen width
     useEffect(() => {
         if (cardReference.current) {
             const innerElement = cardReference.current.querySelector('.habbit-card-container');
             if (innerElement) {
                 const height = innerElement.getBoundingClientRect().height * (1440 / window.screen.width);
-                cardReference.current.style.height = height + 'px';
+                cardReference.current.style.height = `${height}px`;
             }
         }
     }, []);
 
-    /**
-     * Determines the best direction to expand the card on hover
-     * based on available space around it within the container.
-     * Assigns approprate class name to active card expansion direction. 
-     */
-    const handleMouseEnter = (): void => {
+    // Calculates completion percentage from activity array
+    const findGraphData = (valuesArray: number[]): number => {
+        return (valuesArray.reduce((sum, value) => sum + value, 0) / valuesArray.length) * 100;
+    };
+
+    // Marks habit as completed via API
+    const markAsCompleted = () => {
+        post('/habbits/setActivityStatus', { habitId })
+            .then((response) => console.log("Activity status updated", response))
+            .catch((error) => console.error("Error updating activity status", error));
+    };
+
+    // Updates habit details via API
+    const updateHabit = (data: any) => {
+        patch('/habbits/updateActivityData', { habitId, ...data })
+            .then(() => {
+                updateUI();
+            })
+            .catch((err) => console.error("Error updating habit", err));
+    };
+
+    // Deletes habit via API
+    const deleteHabit = (data: any) => {
+        del('/habbits/deleteHabitData', { habitId })
+            .then(() => {
+                updateUI();
+            })
+            .catch((err) => console.error("Error deleting habit", err));
+    };
+
+    // Opens dialog to update habit details
+    const handleUpdateHabit = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        openDialog({
+            type: 'input',
+            title: 'Update habit',
+            message: 'Please enter the habit detail below:',
+            inputConfig: [
+                {
+                    name: 'title',
+                    label: 'Habit name',
+                    type: 'text',
+                    placeholder: 'Enter habit name',
+                    defaultValue: title,
+                    validator: {
+                        required: 'Habit name is required',
+                        minLength: 'Name must be at least 2 characters',
+                    },
+                },
+            ],
+            onConfirm: (data) => {
+                if (data) updateHabit(data);
+                closeDialog();
+            },
+            onCancel: closeDialog,
+        });
+    };
+
+    // Opens dialog to confirm habit deletion
+    const handleDeleteHabit = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        openDialog({
+            type: 'input',
+            title: 'Deletewarden',
+            message: 'Are you sure of deleting this habit',
+            onConfirm: (data) => {
+                if (data) deleteHabit(data);
+                closeDialog();
+            },
+            onCancel: closeDialog,
+        });
+    };
+
+    // Determines card expansion direction on hover
+    const handleMouseEnter = () => {
         if (!cardReference.current) return;
-
-        const cardEl = cardReference.current.getElementsByClassName('habbit-card-container')[0] as HTMLElement | undefined;
-        const containerEl = document.getElementsByClassName('grid-layout-2')[0] as HTMLElement | undefined;
-
+        const cardEl = cardReference.current.getElementsByClassName('habbit-card-container')[0] as HTMLElement;
+        const containerEl = document.getElementsByClassName('grid-layout-2')[0] as HTMLElement;
         if (!cardEl || !containerEl) return;
 
-        const cardRect: DOMRect = cardEl.getBoundingClientRect();
-        const containerRect: DOMRect = containerEl.getBoundingClientRect();
-
-        const spaceRight: number = containerRect.right - cardRect.right;
-        const spaceLeft: number = cardRect.left - containerRect.left;
-        const spaceBottom: number = containerRect.bottom - cardRect.bottom;
-        const spaceTop: number = cardRect.top - containerRect.top;
+        const cardRect = cardEl.getBoundingClientRect();
+        const containerRect = containerEl.getBoundingClientRect();
+        const spaceRight = containerRect.right - cardRect.right;
+        const spaceLeft = cardRect.left - containerRect.left;
+        const spaceBottom = containerRect.bottom - cardRect.bottom;
+        const spaceTop = cardRect.top - containerRect.top;
 
         if (spaceBottom < 250 && spaceTop > spaceBottom && spaceRight > 650 && spaceLeft < spaceRight) {
             setExpandClass("card-expand-top");
@@ -71,58 +132,46 @@ const HabbitCard: React.FC<cardInputProps> = ({ weeklyActivity, activityId, isAc
             setExpandClass("card-expand-bottom");
         }
         setIsHovred(true);
-
     };
 
-    /**
-     * Resets card expansion status.
-     */
+    // Resets card expansion on mouse leave
     const handleMouseLeave = () => {
         setExpandClass("");
         setIsHovred(false);
     };
 
-    const findGraphData = (valuesArray: number[]): number => {
-        return ((valuesArray.reduce((accumulator: number, value: number) => {
-            return accumulator + value;
-        }) / valuesArray.length) * 100)
-    }
-
     return (
-        <>
-            <div
-                title="Click to mark as completed"
-                className={`habbit-card-container-mock`}
-                ref={cardReference}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-            >
-                <div className={`habbit-card-container ${expandClass}`}>
-                    <table style={{ width: "100%" }}>
-                        <tbody>
-                            <tr>
-                                <td className="habbit-name">
-                                    {title}
-                                </td>
-                                <td style={{ display: "flex", justifyContent: "end" }}>
-                                    <ActionsDropdown />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div className="activity-content-container">
-                        <div className="activity-status-container">
-                            <ActivityBox userActivity={isHovred ? yearlyActivity : weeklyActivity} />
-                        </div>
-                        <div className="circle-graph-container">
-                            <CircleGraph width={findGraphData(yearlyActivity)} />
-                        </div>
+        <div
+            title="Click to mark as completed"
+            className="habbit-card-container-mock"
+            ref={cardReference}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        >
+            <div onClick={markAsCompleted} className={`habbit-card-container ${expandClass}`}>
+                <table style={{ width: "100%" }}>
+                    <tbody>
+                        <tr>
+                            <td onClick={handleUpdateHabit} className="habbit-name">
+                                {title} <EditIcon iconSize={12} color="var(--text-color)" customClassName="actions-icon" />
+                            </td>
+                            <td onClick={handleDeleteHabit} style={{ display: "flex", justifyContent: "end" }}>
+                                <TrashIconSolid customClassName="actions-icon" strokeSize={2.5} />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div className="activity-content-container">
+                    <div className="activity-status-container">
+                        <ActivityBox userActivity={isHovred ? yearlyActivity : weeklyActivity} />
+                    </div>
+                    <div className="circle-graph-container">
+                        <CircleGraph width={findGraphData(yearlyActivity)} />
                     </div>
                 </div>
             </div>
-        </>
-    )
-}
-
+        </div>
+    );
+};
 
 export default HabbitCard;

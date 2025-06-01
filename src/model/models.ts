@@ -8,4 +8,5 @@ export interface AlternativeActivityApiResponse {
 export interface ActivityData {
     title: string;
     activity: string[];
+    habitId: string
 }

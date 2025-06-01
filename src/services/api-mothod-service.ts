@@ -12,5 +12,5 @@ export const put = (url: string, data = {}, config = {}) =>
 export const patch = (url: string, data = {}, config = {}) =>
     api.patch(url, data, config);
 
-export const del = (url: string, config = {}) => // renamed from "delete"
-    api.delete(url, config);
+export const del = (url: string, params = {}, config = {}) =>
+    api.delete(url, { ...config, params });

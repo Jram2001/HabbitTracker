@@ -24,7 +24,7 @@ module.exports.getHabbitActivityStatus = async (req, res) => {
 
         const activityStatus = Models.Habbit.findOne(
             { _id: ObjectId(habbitId) },
-            { activity: { $slice: limit }, _id: 0 }
+            { activity: { $slice: limit }, habitId: _id }
         )
 
         if (!habit) {
@@ -71,8 +71,14 @@ module.exports.getHabitActivityByUser = async (req, res) => {
 
         const habit = await Models.Habit.find(
             { userId: userId },
-            { title: 1, activity: { $slice: parseInt(limit) }, _id: 0 }
+            { title: 1, activity: { $slice: parseInt(limit) }, _id: 1 }
         );
+
+        const formatted = habit.map(habit => ({
+            habitId: habit._id,
+            title: habit.title,
+            activity: habit.activity
+        }));
 
         console.log(habit, 'habbit');
         if (!habit) {
@@ -84,7 +90,7 @@ module.exports.getHabitActivityByUser = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            data: habit
+            data: formatted
         });
 
     } catch (error) {
@@ -118,7 +124,7 @@ module.exports.addNewHabbit = async (req, res) => {
         }
 
         // Create new habit document
-        const newHabbit = new Models.Habbit({
+        const newHabbit = new Models.Habit({
             userId,
             title,
             activity: [],
@@ -145,27 +151,27 @@ module.exports.addNewHabbit = async (req, res) => {
 
 module.exports.updateActivityStatus = async (req, res) => {
     try {
-        console.log('UPDATE NEW HABBIT CALLED');
 
-        const { habbitId } = req.body;
+        const { habitId } = req.body;
+        console.log('UPDATE NEW HABBIT CALLED', habitId);
 
         // Validate input
-        if (!habbitId) {
+        if (!habitId) {
             return res.status(400).json({
                 success: false,
-                message: "Missing required field: habbitId"
+                message: "Missing required field: habitId"
             });
         }
 
-        if (!mongoose.Types.ObjectId.isValid(habbitId)) {
+        if (!mongoose.Types.ObjectId.isValid(habitId)) {
             return res.status(400).json({
                 success: false,
-                message: "Invalid habbitId"
+                message: "Invalid habitId"
             });
         }
 
         // Fetch the habit
-        const habbit = await Models.Habbit.findById(habbitId);
+        const habbit = await Models.Habit.findById(habitId);
         if (!habbit) {
             return res.status(404).json({
                 success: false,
@@ -202,3 +208,88 @@ module.exports.updateActivityStatus = async (req, res) => {
         });
     }
 };
+
+module.exports.updateActivityData = async (req, res) => {
+    try {
+        const { habitId, title } = req.body;
+        console.log(habitId, 'habitId', req.body)
+
+        if (!habitId || !title) {
+            return res.status(400).json({
+                success: false,
+                message: "Missing required field: habbitId or title"
+            });
+        }
+        if (!mongoose.Types.ObjectId.isValid(habitId)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid habitId"
+            });
+        }
+
+        // Fetch the habit
+        const habit = await Models.Habit.findById(habitId);
+        if (!habit) {
+            return res.status(404).json({
+                success: false,
+                message: "Habit not found"
+            });
+        }
+
+        habit.title = title;
+        await habit.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Habit updated successfully",
+            data: habit
+        });
+
+    } catch (error) {
+        console.error("Error updating activity:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error: error.message
+        });
+    }
+}
+
+module.exports.deleteActivityData = async (req, res) => {
+    try {
+        const { habitId } = req.query;
+        console.log('DELETE HABIT ACTIVITY CALLED', habitId);
+
+        if (!habitId || typeof habitId !== 'string' || habitId.trim() === '') {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid or missing habitId"
+            });
+        }
+
+        const deleteHabit = await Models.Habit.deleteOne({
+            _id: new mongoose.Types.ObjectId(habitId)
+        });
+
+        if (deleteHabit.deletedCount === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Habit not found"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Habit deleted successfully",
+            data: deleteHabit
+        });
+
+    } catch (error) {
+        console.error('Error deleting habit activity:', error);
+        return res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
+    }
+};
+

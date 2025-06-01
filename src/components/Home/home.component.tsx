@@ -12,20 +12,34 @@ const Home: React.FC = ({ }) => {
     const [allUserActivity, setAllUserActivity] = useState<ActivityData[]>();
 
     useEffect(() => {
-        get('/habbits/getActivityByUser', { "userId": "68318d48493cd55bd1a13ef4", "limit": "7" }).then((response: AlternativeActivityApiResponse) => {
-            setAllUserActivity(response?.data?.data);
-        }).catch((error) => {
-            console.error('Error in fetching activity data', error)
-        });
+        fetchUserActivity();
     }, []);
 
     const [hovredIndex, setHovredIndex] = useState<number | null>(null);
-    console.log(allUserActivity, 'allUserActivity')
+
+    const updateUI = (data: any) => {
+        fetchUserActivity();
+    }
+
+    const fetchUserActivity = () => {
+        return get('/habbits/getActivityByUser', {
+            userId: '68318d48493cd55bd1a13ef4',
+            limit: '200'
+        })
+            .then((response: AlternativeActivityApiResponse) => {
+                setAllUserActivity(response?.data?.data);
+                return response?.data?.data; // return in case updateUI needs it
+            })
+            .catch((error) => {
+                console.error('Error in fetching activity data', error);
+            });
+    };
+
     return (
         <>
             <div className="home-container">
                 <div className="grid-layout-1">
-                    <WelcomeUser userName="Jayaram" />
+                    <WelcomeUser userName="Jayaram" updateUI={updateUI} />
                     <RepetingTodo />
                 </div>
                 <div className="grid-layout-2">
@@ -34,8 +48,9 @@ const Home: React.FC = ({ }) => {
                             title={activity.title}
                             weeklyActivity={fillDatesWithFlags(activity.activity, 7)}
                             yearlyActivity={fillDatesWithFlags(activity.activity, 200)}
-                            activityId={index}
+                            habitId={activity.habitId}
                             isActive={index == hovredIndex}
+                            updateUI={updateUI}
                         />
                     })}
                 </div>
