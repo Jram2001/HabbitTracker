@@ -6,7 +6,6 @@ const WelcomeUser: React.FC<{ userName: string; updateUI: Function }> = ({ userN
 
     // Opens dialog to update habit details
     const handleAddHabit = () => {
-        console.log('called')
         openDialog({
             type: 'input',
             title: 'Update habit',

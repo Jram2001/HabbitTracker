@@ -1,4 +1,5 @@
 export function fillDatesWithFlags(dates: string[], limit: number): number[] {
+    console.log(dates, "called")
     if (!dates || dates.length === 0) return Array(limit).fill(0);
 
     const today = new Date();

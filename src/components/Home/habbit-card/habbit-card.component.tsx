@@ -13,7 +13,7 @@ type CardInputProps = {
     habitId: string;
     isActive: boolean;
     title: string;
-    updateUI: Function
+    updateUI: Function;
 };
 
 /**
@@ -45,7 +45,7 @@ const HabbitCard: React.FC<CardInputProps> = ({ weeklyActivity, habitId, isActiv
     // Marks habit as completed via API
     const markAsCompleted = () => {
         post('/habbits/setActivityStatus', { habitId })
-            .then((response) => console.log("Activity status updated", response))
+            .then((response) => { updateUI(), console.log("Activity status updated", response) })
             .catch((error) => console.error("Error updating activity status", error));
     };
 

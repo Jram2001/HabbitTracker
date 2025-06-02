@@ -27,8 +27,9 @@ const Home: React.FC = ({ }) => {
             limit: '200'
         })
             .then((response: AlternativeActivityApiResponse) => {
-                setAllUserActivity(response?.data?.data);
-                return response?.data?.data; // return in case updateUI needs it
+                const freshData = JSON.parse(JSON.stringify(response?.data?.data));
+                setAllUserActivity(freshData);
+                return freshData;
             })
             .catch((error) => {
                 console.error('Error in fetching activity data', error);
