@@ -140,7 +140,7 @@ const CommonDialog: React.FC<DialogState> = ({
         });
         onConfirm(convertedData);
     }, [onConfirm, inputConfig]);
-    
+
     // Handle keyboard events (Esc to cancel)
     const handleKeyDown = useCallback(
         (e: React.KeyboardEvent) => {

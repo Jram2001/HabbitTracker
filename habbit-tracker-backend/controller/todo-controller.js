@@ -103,3 +103,60 @@ module.exports.addHabbitActivityStatus = async (req, res) => {
         res.status(500).json({ error: 'Failed to add todo', details: error.message });
     }
 };
+
+// Update todoData of a specific document
+module.exports.updateTodo = async (req, res) => {
+    try {
+        const { _id, userId, todoData } = req.body;
+
+        // Validation
+        if (!mongoose.Types.ObjectId.isValid(_id) || !mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({ error: 'Invalid ID format' });
+        }
+
+        const updated = await Todo.findOneAndUpdate(
+            { _id, userId },
+            { $set: { todoData } },
+            { new: true } // return the updated document
+        );
+
+        if (!updated) {
+            return res.status(404).json({ error: 'Todo not found' });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Todo updated successfully',
+            data: updated
+        });
+    } catch (error) {
+        console.error('Update error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
+module.exports.deleteTodo = async (req, res) => {
+    try {
+        const { _id } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(_id) || !mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({ error: 'Invalid ID format' });
+        }
+
+        const deleted = await Todo.findOneAndDelete({ _id });
+
+        if (!deleted) {
+            return res.status(404).json({ error: 'Todo not found' });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Todo deleted successfully',
+            data: deleted
+        });
+    } catch (error) {
+        console.error('Delete error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};

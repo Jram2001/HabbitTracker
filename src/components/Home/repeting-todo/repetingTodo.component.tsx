@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './repetingtodo.component.scss';
-import { del, get, patch } from '../../../services/api-mothod-service';
+import { del, get, patch, post } from '../../../services/api-mothod-service';
 import type { getTodoResponse, GetTodosResponse, TodoEntry, TodoItem } from '../../../model/models';
 import { AddIcon, EditIcon, TrashIcon } from '../../icons.constants';
 import { useDialog } from '../../../providers/common-dialog-interface';
@@ -32,9 +32,9 @@ const RepetingTodo: React.FC<{ updateUI: Function }> = ({ updateUI }) => {
         }
     };
 
+
     // Opens dialog to update habit details
-    const handleUpdateTodo = (value: string, e: React.MouseEvent, index: number) => {
-        setDefaultValue(value)
+    const handleAddTodo = (e: React.MouseEvent) => {
         e.stopPropagation();
         openDialog({
             type: 'input',
@@ -46,7 +46,7 @@ const RepetingTodo: React.FC<{ updateUI: Function }> = ({ updateUI }) => {
                     label: 'Todo name',
                     type: 'text',
                     placeholder: 'Enter todo name',
-                    defaultValue: defaultValue,
+                    defaultValue: '',
                     validator: {
                         required: 'todo name is required',
                         minLength: 'Name must be at least 2 characters',
@@ -54,26 +54,75 @@ const RepetingTodo: React.FC<{ updateUI: Function }> = ({ updateUI }) => {
                 },
             ],
             onConfirm: (data) => {
+                if (todoData) {
+                    let updatedValue = todoData;
+                    updatedValue.todoData.push({ title: String(data?.title), date: '' });
+                    console.log('updatedValue');
+                    setTodoData(updatedValue);
+                }
                 closeDialog();
+                updateTodo();
             },
             onCancel: closeDialog,
         });
     };
 
-
-    // Updates habit details via API
-    const updateHabit = (data: any) => {
-        patch('/todo/updateTodo', { habitId, ...data })
-            .then(() => {
-                updateUI();
-            })
-            .catch((err) => console.error("Error updating habit", err));
+    // Opens dialog to update habit details
+    const handleUpdateTodo = (value: string, e: React.MouseEvent, index: number) => {
+        console.log("called");
+        if (value) {
+            setDefaultValue(String(value));
+            e.stopPropagation();
+            openDialog({
+                type: 'input',
+                title: 'Update habit',
+                message: 'Please enter the habit detail below:',
+                inputConfig: [
+                    {
+                        name: 'title',
+                        label: 'Todo name',
+                        type: 'text',
+                        placeholder: 'Enter todo name',
+                        defaultValue: defaultValue,
+                        validator: {
+                            required: 'todo name is required',
+                            minLength: 'Name must be at least 2 characters',
+                        },
+                    },
+                ],
+                onConfirm: (data) => {
+                    if (defaultValue && todoData) {
+                        let updatedValue = todoData;
+                        updatedValue.todoData[0].title = String(data?.title);
+                        setTodoData(updatedValue);
+                    }
+                    closeDialog();
+                    updateTodo();
+                },
+                onCancel: closeDialog,
+            });
+        }
     };
 
 
+    // // Updates habit details via API
+    // const updateHabit = (data: any) => {
+    //     patch('/todo/updateTodo', { habitId, ...data })
+    //         .then(() => {
+    //             updateUI();
+    //         })
+    //         .catch((err) => console.error("Error updating habit", err));
+    // };
+
+
     // Opens dialog to confirm habit deletion
-    const handleDeleteTodo = (e: React.MouseEvent) => {
+    const handleDeleteTodo = (e: React.MouseEvent, index: number) => {
         e.stopPropagation();
+        let updatedValue = todoData;
+        if (updatedValue)
+            updatedValue.todoData = updatedValue?.todoData.splice(index, index) || [];
+        console.log(updatedValue, 'updatedValue', index);
+        setTodoData(updatedValue);
         openDialog({
             type: 'input',
             title: 'Deletewarden',
@@ -81,6 +130,8 @@ const RepetingTodo: React.FC<{ updateUI: Function }> = ({ updateUI }) => {
             onConfirm: (data) => {
                 if (data) deleteHabit(data);
                 closeDialog();
+                setTodoData(updatedValue);
+                updateTodo();
             },
             onCancel: closeDialog,
         });
@@ -88,7 +139,13 @@ const RepetingTodo: React.FC<{ updateUI: Function }> = ({ updateUI }) => {
 
     // Deletes habit via API
     const deleteHabit = (data: any) => {
-        del('/habbits/deleteHabitData')
+        del('/todo/deleteTodo')
+            .catch((err) => console.error("Error deleting habit", err));
+    };
+
+    // Deletes habit via API
+    const updateTodo = () => {
+        post('/todo/updateTodo', todoData).then(updateUI())
             .catch((err) => console.error("Error deleting habit", err));
     };
 
@@ -109,12 +166,12 @@ const RepetingTodo: React.FC<{ updateUI: Function }> = ({ updateUI }) => {
                         className="todo-contant">{data.title}
                         <div className='add-icon-container'>
                             <span onClick={(e) => handleUpdateTodo(data.title, e, index)} ><EditIcon iconSize={12} color="var(--text-color)" customClassName="actions-icon" />&nbsp;</span>
-                            <span onClick={(e) => handleDeleteTodo(e)} ><TrashIcon iconSize={12} color="var(--text-color)" customClassName="actions-icon" /></span>
+                            <span onClick={(e) => handleDeleteTodo(e, index)} ><TrashIcon iconSize={12} color="var(--text-color)" customClassName="actions-icon" /></span>
                         </div>
                     </div>
                 })}
                 {todoData && todoData.todoData.length < 5 ?
-                    <div className="todo-contant add-todo-contant">Add todo <div className='add-icon-container'><AddIcon iconSize={12} color="var(--text-color)" customClassName="actions-icon" /></div></div> : ''
+                    <div onClick={(e) => handleAddTodo(e)} className="todo-contant add-todo-contant">Add todo <div className='add-icon-container'><AddIcon iconSize={12} color="var(--text-color)" customClassName="actions-icon" /></div></div> : ''
                 }
             </div>
         </>
