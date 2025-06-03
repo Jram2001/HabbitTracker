@@ -11,18 +11,22 @@ export interface ActivityData {
     habitId: string
 }
 
-export interface TodoData {
-    title: string;
-    date: string; // ISO string format (e.g., "2025-06-01T00:00:00.000Z")
-}
-
-export interface TodoItem {
-    _id: string;      // MongoDB ObjectId as a string
-    userId: string;   // ObjectId as string
-    todoData: TodoData;
-}
-
 export interface GetTodosResponse {
+    success: boolean;
+    data: TodoItem[];
+    count: number;
+}
+export interface TodoEntry {
+    title: string;
+    date: string;
+}
+export interface TodoItem {
+    _id: string;
+    userId: string;
+    todoData: TodoEntry[]
+}
+
+export interface getTodoResponse {
     success: boolean;
     data: TodoItem[];
     count: number;

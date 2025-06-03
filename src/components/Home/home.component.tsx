@@ -41,7 +41,7 @@ const Home: React.FC = ({ }) => {
             <div className="home-container">
                 <div className="grid-layout-1">
                     <WelcomeUser userName="Jayaram" updateUI={updateUI} />
-                    <RepetingTodo />
+                    <RepetingTodo updateUI={updateUI} />
                 </div>
                 <div className="grid-layout-2">
                     {allUserActivity?.map((activity, index) => {

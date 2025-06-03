@@ -25,6 +25,9 @@
 
 .todo-contant {
     cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-weight: 600;
     color: var(--text-color);
     font-size: 0.8rem;
@@ -39,4 +42,12 @@
     border-style: dashed;
     box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
     // text-decoration: line-through;
+}
+
+.add-todo-contant {
+    font-size: 0.7rem;
+}
+
+.add-icon-container {
+    display: inline;
 }
