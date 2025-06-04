@@ -93,7 +93,7 @@ const RepetingTodo: React.FC<{ updateUI: Function }> = ({ updateUI }) => {
                 onConfirm: (data) => {
                     if (defaultValue && todoData) {
                         let updatedValue = todoData;
-                        updatedValue.todoData[0].title = String(data?.title);
+                        updatedValue.todoData[index].title = String(data?.title);
                         setTodoData(updatedValue);
                     }
                     closeDialog();
@@ -114,6 +114,13 @@ const RepetingTodo: React.FC<{ updateUI: Function }> = ({ updateUI }) => {
     //         .catch((err) => console.error("Error updating habit", err));
     // };
 
+    const handleTodoStatus = (index: number, date: string) => {
+        let updatedValue = todoData;
+        if (updatedValue)
+            updatedValue.todoData[index].date = String(date);
+        setTodoData(updatedValue);
+        updateTodo();
+    }
 
     // Opens dialog to confirm habit deletion
     const handleDeleteTodo = (e: React.MouseEvent, index: number) => {
@@ -155,6 +162,12 @@ const RepetingTodo: React.FC<{ updateUI: Function }> = ({ updateUI }) => {
         "movie"
     ]
 
+    const isDateEqual = (date: string) => {
+        return new Date(date).getFullYear() === new Date().getFullYear() &&
+            new Date(date).getMonth() === new Date().getMonth() &&
+            new Date(date).getDate() === new Date().getDate()
+    }
+
     return (
         <>
             <div className="repeting-todo-container">
@@ -162,7 +175,12 @@ const RepetingTodo: React.FC<{ updateUI: Function }> = ({ updateUI }) => {
                     <img src="/src/assets/todos.png" alt="" />
                 </div>
                 {todoData?.todoData.map((data: TodoEntry, index: number) => {
-                    return <div title="Click to mark as completed"
+                    return <div
+                        style={{
+                            textDecoration: isDateEqual(data.date) ? 'line-through' : ''
+                        }}
+                        onClick={() => handleTodoStatus(index, isDateEqual(data.date) ? '' : String(new Date()))}
+                        title="Click to mark as completed"
                         className="todo-contant">{data.title}
                         <div className='add-icon-container'>
                             <span onClick={(e) => handleUpdateTodo(data.title, e, index)} ><EditIcon iconSize={12} color="var(--text-color)" customClassName="actions-icon" />&nbsp;</span>

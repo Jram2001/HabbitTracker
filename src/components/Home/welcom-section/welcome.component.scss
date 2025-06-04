@@ -8,6 +8,8 @@
     padding: 0.75rem;
     font-size: 0.75rem;
     transition: margin 0.1s ease-in;
+    background-color: var(--natural-color);
+    color: var(--primary-color);
 
     &:hover {
         border: 1px solid var(--text-color);

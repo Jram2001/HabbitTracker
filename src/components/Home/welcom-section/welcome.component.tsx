@@ -47,7 +47,6 @@ const WelcomeUser: React.FC<{ userName: string; updateUI: Function }> = ({ userN
                 <span style={{ display: "block", fontSize: "36px", fontWeight: "600", fontFamily: "cookie" }}>{userName}</span>
             </div>
             <button onClick={handleAddHabit} className='primary-button welcome-button'> Add task </button>
-            <button className='secondary-button welcome-button'> Repeting todo </button>
         </div>
     )
 }
