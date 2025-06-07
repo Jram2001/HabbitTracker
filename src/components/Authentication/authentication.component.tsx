@@ -15,10 +15,13 @@ import { useForm, FormProvider, type SubmitHandler } from "react-hook-form";
 import CustomInput from "../custom/custom-input/custom-input";
 import './authentication.css';
 import { get, post } from "../../services/api-mothod-service";
+import { useNavigate, useNavigation } from "react-router-dom";
+import { useState } from "react";
 type FormValues = {
     email: string;
     password: string;
 };
+
 
 const AuthenticationComponent = () => {
     const methods = useForm<FormValues>({
@@ -28,6 +31,9 @@ const AuthenticationComponent = () => {
             password: ""
         }
     });
+
+
+    const navigate = useNavigate();
 
     const onSubmit: SubmitHandler<FormValues> = (data) => {
         post('/authenticate', data)
@@ -64,7 +70,7 @@ const AuthenticationComponent = () => {
                         <button type="submit" className="signin">
                             Submit
                         </button>
-                        <button type="submit" className="signup">
+                        <button onClick={() => navigate('/signup')} type="submit" className="signup">
                             Sign up
                         </button>
                     </div>

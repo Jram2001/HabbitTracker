@@ -1,5 +1,6 @@
 .authentication-container {
     padding: 2rem;
+    transition: all 0.2s ease-in;
     height: fit-content;
     position: absolute;
     top: 50%;
@@ -45,4 +46,36 @@
     border: 1px solid var(--natural-color);
     border-radius: 0.2rem;
     color: var(--natural-color);
+}
+
+.loading-spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid var(--text-color);
+    border-right-color: var(--primary-color);
+    border-radius: 50%;
+    justify-self: center;
+    animation: spinner 3s infinite;
+}
+
+@keyframes spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.form-container,
+.container-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.container-group {
+    flex-direction: column;
+    gap: 0.5rem;
 }

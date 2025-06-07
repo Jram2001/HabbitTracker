@@ -69,7 +69,6 @@ const RepetingTodo: React.FC<{ updateUI: Function }> = ({ updateUI }) => {
 
     // Opens dialog to update habit details
     const handleUpdateTodo = (value: string, e: React.MouseEvent, index: number) => {
-        console.log("called");
         if (value) {
             setDefaultValue(String(value));
             e.stopPropagation();
@@ -155,12 +154,6 @@ const RepetingTodo: React.FC<{ updateUI: Function }> = ({ updateUI }) => {
         post('/todo/updateTodo', todoData).then(updateUI())
             .catch((err) => console.error("Error deleting habit", err));
     };
-
-    const repetingTodo = [
-        "read book",
-        "saatu",
-        "movie"
-    ]
 
     const isDateEqual = (date: string) => {
         return new Date(date).getFullYear() === new Date().getFullYear() &&
