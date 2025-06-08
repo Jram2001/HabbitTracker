@@ -4,12 +4,15 @@ import RepetingTodo from "./repeting-todo/repetingTodo.component";
 import "./home.component.scss"
 import WelcomeUser from "./welcom-section/welcome.component";
 import { useEffect, useState } from "react";
-import { get } from "../../services/api-mothod-service";
+import { get, post } from "../../services/api-mothod-service";
 import { fillDatesWithFlags } from "../../utils/util";
 import type { ActivityData, AlternativeActivityApiResponse } from "../../model/models";
+import { AddIcon, TrashIconSolid } from "../icons.constants";
+import { useDialog } from "../../providers/common-dialog-interface";
 
 const Home: React.FC = ({ }) => {
     const [allUserActivity, setAllUserActivity] = useState<ActivityData[]>();
+    const { openDialog, closeDialog } = useDialog(); // Dialog management hooks
 
     useEffect(() => {
         fetchUserActivity();
@@ -17,13 +20,49 @@ const Home: React.FC = ({ }) => {
 
     const [hovredIndex, setHovredIndex] = useState<number | null>(null);
 
-    const updateUI = (data: any) => {
+    const updateUI = (data?: any) => {
         fetchUserActivity();
     }
 
+    // Opens dialog to update habit details
+    const handleAddHabit = () => {
+        openDialog({
+            type: 'input',
+            title: 'Update habit',
+            message: 'Please enter the habit detail below:',
+            inputConfig: [
+                {
+                    name: 'title',
+                    label: 'Habit name',
+                    type: 'text',
+                    placeholder: 'Enter habit name',
+                    defaultValue: '',
+                    validator: {
+                        required: 'Habit name is required',
+                        minLength: 'Name must be at least 2 characters',
+                    },
+                },
+            ],
+            onConfirm: (data) => {
+                if (data) updateHabit(data);
+                closeDialog();
+            },
+            onCancel: closeDialog,
+        });
+    };
+
+    // Updates habit details via API
+    const updateHabit = (data: any) => {
+        post('/habbits/addNewHabit', { ...data, userId: localStorage?.getItem?.('userId') })
+            .then(() => {
+                updateUI();
+            })
+            .catch((err) => console.error("Error updating habit", err));
+    };
+
     const fetchUserActivity = () => {
         return get('/habbits/getActivityByUser', {
-            userId: '68318d48493cd55bd1a13ef4',
+            userId: localStorage?.getItem?.('userId'),
             limit: '200'
         })
             .then((response: AlternativeActivityApiResponse) => {
@@ -40,10 +79,13 @@ const Home: React.FC = ({ }) => {
         <>
             <div className="home-container">
                 <div className="grid-layout-1">
-                    <WelcomeUser userName="Jayaram" updateUI={updateUI} />
                     <RepetingTodo updateUI={updateUI} />
                 </div>
                 <div className="grid-layout-2">
+                    <div onClick={handleAddHabit} className="add-habbit-card">
+                        <div>Add habbit</div>
+                        <AddIcon color="var(--text-color)" customClassName="actions-icon" strokeSize={4} />
+                    </div>
                     {allUserActivity?.map((activity, index) => {
                         return <HabbitCard
                             title={activity.title}

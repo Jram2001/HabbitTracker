@@ -136,6 +136,19 @@ module.exports.updateTodo = async (req, res) => {
 };
 
 
+module.exports.createInitialTodoForUser = async (userId) => {
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        throw new Error('Invalid userId format');
+    }
+
+    const newTodo = new Todo({
+        userId,
+        todoData: [] // or provide default structure if needed
+    });
+
+    return await newTodo.save();
+}
+
 module.exports.deleteTodo = async (req, res) => {
     try {
         const { _id } = req.body;

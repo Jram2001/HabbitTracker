@@ -33,7 +33,7 @@ const WelcomeUser: React.FC<{ userName: string; updateUI: Function }> = ({ userN
 
     // Updates habit details via API
     const updateHabit = (data: any) => {
-        post('/habbits/addNewHabit', { ...data, userId: "68318d48493cd55bd1a13ef4" })
+        post('/habbits/addNewHabit', { ...data, userId: localStorage?.getItem?.('userId') })
             .then(() => {
                 updateUI();
             })

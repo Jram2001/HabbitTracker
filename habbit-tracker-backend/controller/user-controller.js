@@ -5,6 +5,7 @@ const constant = require('../constant/constant');  // Constant values like regex
 const bcrypt = require('bcrypt');  // Library for hashing passwords
 const jwt = require('jsonwebtoken');
 const nodemailer = require("nodemailer");
+const { createInitialTodoForUser } = require('./todo-controller');
 const otpStore = {};
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -64,51 +65,6 @@ module.exports.getOneUser = async (req, res) => {
 };
 
 /**
- * Controller method to validate a user's credentials during login.
- * 
- * This method checks if the email and password are provided, validates the email format,
- * and compares the provided password with the stored hashed password in the database.
- * If valid, the user is successfully authenticated and a success response is sent.
- * In case of any invalid input or failure, the corresponding error response is sent.
- */
-module.exports.validateUser = async (req, res) => {
-    const request = req.body;
-    try {
-        // Check if email and password are provided
-        if (!request.email && !request.password) {
-            return res.status(400).json({ error: 'Email and Password are required' });
-        }
-
-        // Validate the email format using a regular expression
-        const isValidEmail = constant.EMAIL_REGEX.test(request.email);
-        if (!isValidEmail) {
-            return res.status(400).json({ error: 'Not a valid email' });
-        }
-
-        // Retrieve the user by email
-        const userData = await util.getUserByEmail(request.email);
-        if (!userData) {
-            return res.status(404).json({ error: 'Invalid email or password' });
-        }
-
-        // Compare the provided password with the stored hashed password
-        const isPasswordValid = await bcrypt.compare(request.password, userData.password);
-        if (!isPasswordValid) {
-            return res.status(400).json({ error: 'Invalid email or password' });
-        }
-
-        const token = util.generateToken({ id: request.id, email: request.email })
-
-        // If authentication is successful, send a success response
-        res.status(200).json({ message: 'User validated successfully', token: token, userId: userData.id, profilePicture: userData.profilePicture });
-    } catch (err) {
-        // Handle server-side errors and send an error response
-        res.status(500).json({ error: `Internal server error ${err}` });
-    }
-}
-
-
-/**
  * Controller method to create a new user.
  * 
  * This method first validates the email and password formats, then checks if the email
@@ -122,7 +78,7 @@ module.exports.createUser = async (req, res) => {
 
         console.log(email, password, name)
         if (!email || !password || !name) {
-            return res.status(400).json({ error: "Missing required feilds" });
+            return res.status(400).json({ error: "Missing required fields" });
         }
 
         // Validate the email format
@@ -156,7 +112,12 @@ module.exports.createUser = async (req, res) => {
         // Save user
         await newUser.save();
 
-        return res.status(200).json({ message: 'User created successfully' });
+        await createInitialTodoForUser(newUser._id);
+
+        return res.status(200).json({
+            message: 'User created successfully',
+            id: newUser._id // <-- Add user ID here
+        });
 
     } catch (error) {
         console.error(error);
@@ -165,8 +126,9 @@ module.exports.createUser = async (req, res) => {
 };
 
 
+
 /**
- * @desc    Sends a One-Time Password (OTP) to the user's email for verification,
+ * @desc    Sends a One-Time Password (OTP) to the user's email for verification,authenticatee
  *          only if the email is not already registered.
  * @route   POST /api/send-otp
  * @access  Public
@@ -256,5 +218,56 @@ module.exports.verifyOTP = (req, res) => {
     } catch (error) {
         console.error("Error verifying OTP:", error);
         return res.status(500).json({ error: "Internal server error" });
+    }
+};
+/**
+ * Controller method to validate a user's credentials during login.
+ * 
+ * This method checks if the email and password are provided, validates the email format,
+ * and compares the provided password with the stored hashed password in the database.
+ * If valid, the user is successfully authenticated and a success response is sent.
+ * In case of any invalid input or failure, the corresponding error response is sent.
+ */
+module.exports.validateUser = async (req, res) => {
+    const request = req.body;
+    console.log('CALLED');
+
+    try {
+        // Check if email and password are provided
+        if (!request.email || !request.password) {
+            return res.status(400).json({ error: 'Email and Password are required' });
+        }
+
+        // Validate the email format using a regular expression
+        const isValidEmail = constant.EMAIL_REGEX.test(request.email);
+        if (!isValidEmail) {
+            return res.status(400).json({ error: 'Not a valid email' });
+        }
+
+        // Retrieve the user by email
+        const userData = await util.getUserByEmail(request.email);
+        if (!userData) {
+            return res.status(404).json({ error: 'Invalid email or password' });
+        }
+
+        // Compare the provided password with the stored hashed password
+        const isPasswordValid = await bcrypt.compare(request.password, userData.password);
+        if (!isPasswordValid) {
+            return res.status(400).json({ error: 'Invalid email or password' });
+        }
+
+        // Generate token using the user's actual id and email
+        const token = util.generateToken({ id: userData.id, email: userData.email });
+
+        // Send success response with token and user info
+        res.status(200).json({
+            message: 'User validated successfully',
+            token: token,
+            userId: userData.id,
+            profilePicture: userData.profilePicture
+        });
+    } catch (err) {
+        // Handle server-side errors
+        res.status(500).json({ error: `Internal server error ${err}` });
     }
 };

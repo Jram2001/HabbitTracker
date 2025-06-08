@@ -22,7 +22,6 @@ type FormValues = {
     password: string;
 };
 
-
 const AuthenticationComponent = () => {
     const methods = useForm<FormValues>({
         mode: "onTouched",
@@ -38,8 +37,8 @@ const AuthenticationComponent = () => {
     const onSubmit: SubmitHandler<FormValues> = (data) => {
         post('/authenticate', data)
             .then(response => {
-                const token = response?.data?.token || response; // Adjust depending on response structure
-                localStorage.setItem("authToken", token);
+                localStorage.setItem("authToken", response?.data?.token);
+                localStorage.setItem("userId", response?.data?.userId);
             })
             .catch(error => {
                 console.error('❌ Error:', error?.response?.data || error.message);

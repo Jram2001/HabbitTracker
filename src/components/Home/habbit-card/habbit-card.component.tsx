@@ -25,6 +25,7 @@ const HabbitCard: React.FC<CardInputProps> = ({ weeklyActivity, habitId, isActiv
     const [isHovred, setIsHovred] = useState<boolean>(false); // Tracks hover state
     const [expandClass, setExpandClass] = useState<string>(""); // Controls card expansion direction
     const { openDialog, closeDialog } = useDialog(); // Dialog management hooks
+    const [graphData, setGrapgData] = useState(yearlyActivity.slice(0, 6));
 
     // Adjusts card height based on inner content and screen width
     useEffect(() => {
@@ -112,6 +113,7 @@ const HabbitCard: React.FC<CardInputProps> = ({ weeklyActivity, habitId, isActiv
 
     // Determines card expansion direction on hover
     const handleMouseEnter = () => {
+        setGrapgData(yearlyActivity);
         if (!cardReference.current) return;
         const cardEl = cardReference.current.getElementsByClassName('habbit-card-container')[0] as HTMLElement;
         const containerEl = document.getElementsByClassName('grid-layout-2')[0] as HTMLElement;
@@ -136,6 +138,7 @@ const HabbitCard: React.FC<CardInputProps> = ({ weeklyActivity, habitId, isActiv
 
     // Resets card expansion on mouse leave
     const handleMouseLeave = () => {
+        setGrapgData(yearlyActivity.slice(0, 6));
         setExpandClass("");
         setIsHovred(false);
     };
@@ -166,7 +169,7 @@ const HabbitCard: React.FC<CardInputProps> = ({ weeklyActivity, habitId, isActiv
                         <ActivityBox userActivity={isHovred ? yearlyActivity : weeklyActivity} />
                     </div>
                     <div className="circle-graph-container">
-                        <CircleGraph width={findGraphData(yearlyActivity)} />
+                        <CircleGraph width={findGraphData(graphData)} />
                     </div>
                 </div>
             </div>

@@ -24,3 +24,37 @@
     gap: 0.5rem;
     flex-direction: row;
 }
+
+.add-habbit-card {
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    height: 95px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-container);
+    border-style: dashed;
+    background-color: var(--car-background-color);
+
+    div {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-color);
+    }
+
+    svg {
+        height: 16px !important;
+        width: 16px !important;
+    }
+
+    &:hover {
+        box-shadow: var(--default-shadow);
+    }
+
+    &:active {
+        box-shadow: var(--card-box-shadow);
+    }
+
+}

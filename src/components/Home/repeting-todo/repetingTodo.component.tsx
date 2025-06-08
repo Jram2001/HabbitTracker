@@ -20,7 +20,7 @@ const RepetingTodo: React.FC<{ updateUI: Function }> = ({ updateUI }) => {
     const fetchUserTodo = async () => {
         try {
             const response = await get('/todo/getTodoData', {
-                userId: '68318d48493cd55bd1a13ef4'
+                userId: localStorage?.getItem?.('userId')
             }).then((res) => {
                 setTodoData(res.data.data[0]);
             }).catch((err) => {
@@ -57,7 +57,6 @@ const RepetingTodo: React.FC<{ updateUI: Function }> = ({ updateUI }) => {
                 if (todoData) {
                     let updatedValue = todoData;
                     updatedValue.todoData.push({ title: String(data?.title), date: '' });
-                    console.log('updatedValue');
                     setTodoData(updatedValue);
                 }
                 closeDialog();
@@ -181,7 +180,7 @@ const RepetingTodo: React.FC<{ updateUI: Function }> = ({ updateUI }) => {
                         </div>
                     </div>
                 })}
-                {todoData && todoData.todoData.length < 5 ?
+                {todoData && todoData.todoData.length < 5 || !todoData ?
                     <div onClick={(e) => handleAddTodo(e)} className="todo-contant add-todo-contant">Add todo <div className='add-icon-container'><AddIcon iconSize={12} color="var(--text-color)" customClassName="actions-icon" /></div></div> : ''
                 }
             </div>
