@@ -119,12 +119,10 @@ const SignupComponent = () => {
         post('/user/signup', { name: data.name, email: userEmail, password: data.password })
             .then(response => {
                 const errValue = response.data.error.value;
-                console.log(errValue, 'errValue');
                 if (response.data.success) {
                     console.log("Signup successful");
                 } else {
                     const errValue = response.data.error.value;
-                    console.log(errValue, 'errValue');
                     methodsCompleteSignup.setError(errValue, {
                         type: "server",
                         message: response.data.error.message

@@ -16,8 +16,8 @@ const App = () => {
     const element = document.querySelector('.app-container');
     if (element) {
       console.log(window.screen.width, window.screen.height);
-      document.body.style.transform = `scale(${window.screen.width / 1440})`;
-      document.body.style.height = window.screen.height * (window.screen.height / window.screen.width) + 'px';
+      // document.body.style.transform = `scale(${window.screen.width / 1440})`;
+      // document.body.style.height = window.screen.height * (window.screen.height / window.screen.width) + 'px';
       // (element as HTMLElement).style.transform = `scale(${window.screen.width / 1440})`;
     }
   }

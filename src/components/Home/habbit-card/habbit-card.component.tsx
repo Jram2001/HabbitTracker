@@ -33,7 +33,7 @@ const HabbitCard: React.FC<CardInputProps> = ({ weeklyActivity, habitId, isActiv
             const innerElement = cardReference.current.querySelector('.habbit-card-container');
             if (innerElement) {
                 const height = innerElement.getBoundingClientRect().height * (1440 / window.screen.width);
-                cardReference.current.style.height = `${height}px`;
+                // cardReference.current.style.height = `${height}px`;
             }
         }
     }, []);
@@ -118,7 +118,11 @@ const HabbitCard: React.FC<CardInputProps> = ({ weeklyActivity, habitId, isActiv
         const cardEl = cardReference.current.getElementsByClassName('habbit-card-container')[0] as HTMLElement;
         const containerEl = document.getElementsByClassName('grid-layout-2')[0] as HTMLElement;
         if (!cardEl || !containerEl) return;
-
+        const screenWidth = window.innerWidth;
+        if (screenWidth <= 1023) {
+            setIsHovred(true);
+            return;
+        }
         const cardRect = cardEl.getBoundingClientRect();
         const containerRect = containerEl.getBoundingClientRect();
         const spaceRight = containerRect.right - cardRect.right;
@@ -136,8 +140,29 @@ const HabbitCard: React.FC<CardInputProps> = ({ weeklyActivity, habitId, isActiv
         setIsHovred(true);
     };
 
+    // Trigger onHabbitLoad when component mounts
+    useEffect(() => {
+        onHabbitLoad();
+        return () => {
+        };
+    }, [cardReference]);
+
+    const onHabbitLoad = () => {
+        const screenWidth = window.innerWidth;
+        if (screenWidth <= 1023) {
+            setExpandClass("mobile-view-card");
+            setIsHovred(true);
+            return;
+        }
+    }
+
     // Resets card expansion on mouse leave
     const handleMouseLeave = () => {
+        const screenWidth = window.innerWidth;
+        if (screenWidth <= 1023) {
+            setIsHovred(true);
+            return;
+        }
         setGrapgData(yearlyActivity.slice(0, 6));
         setExpandClass("");
         setIsHovred(false);
@@ -150,6 +175,7 @@ const HabbitCard: React.FC<CardInputProps> = ({ weeklyActivity, habitId, isActiv
             ref={cardReference}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            onLoad={() => onHabbitLoad}
         >
             <div onClick={markAsCompleted} className={`habbit-card-container ${expandClass}`}>
                 <table style={{ width: "100%" }}>

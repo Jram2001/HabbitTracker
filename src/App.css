@@ -7,6 +7,7 @@
 
 #root {
   height: 100%;
+  width: 100%;
 }
 
 /* Animation keyframes */
@@ -35,7 +36,6 @@
   transform-origin: top left;
   display: flex;
   place-content: center;
-  width: 1440px;
   overflow: hidden;
 }
 

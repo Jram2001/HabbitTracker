@@ -22,13 +22,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.habbit-card-container:hover .circle-graph-container {
-    display: block;
-    position: relative;
-    height: 100px;
-    width: 100px;
-    transform: none;
-}
+.habbit-card-container:hover .circle-graph-container {}
 
 /* Active state - simplified box-shadow */
 .habbit-card-container:active {
@@ -108,4 +102,19 @@
 .activity-content-container {
     display: flex;
     justify-content: space-between;
+}
+
+
+.mobile-view-card {
+    height: 250px !important;
+
+    .activity-status-container {
+        width: 100% !important;
+    }
+}
+
+@media (min-width: 300px) and (max-width: 1000px) {
+    .circle-graph-container {
+        opacity: 0.5;
+    }
 }

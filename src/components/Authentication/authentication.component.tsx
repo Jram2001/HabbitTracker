@@ -39,6 +39,7 @@ const AuthenticationComponent = () => {
             .then(response => {
                 localStorage.setItem("authToken", response?.data?.token);
                 localStorage.setItem("userId", response?.data?.userId);
+                navigate('/home');
             })
             .catch(error => {
                 console.error('❌ Error:', error?.response?.data || error.message);
