@@ -7,8 +7,8 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
+Front-end/node_modules/
+habbit-tracker-backend/node_modules
 dist-ssr
 *.local
 
