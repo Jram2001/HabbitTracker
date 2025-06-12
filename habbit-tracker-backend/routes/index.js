@@ -11,7 +11,7 @@ router.use('/todo', todoRouter);
 router.get('/test', (req, res) => {
     res.send('User route works!');
 });
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
   res.send('Habit Tracker API is running!');
 });
 router.post('/authenticate', habbitController.validateUser);
