@@ -100,7 +100,7 @@ const CommonDialog: React.FC<DialogState> = ({
         defaultValues
     });
 
-    const { handleSubmit, reset, formState: { errors } } = methods;
+    const { handleSubmit, reset, formState: { } } = methods;
 
     // Reset form when dialog opens with new config
     useEffect(() => {

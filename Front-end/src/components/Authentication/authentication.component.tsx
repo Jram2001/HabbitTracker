@@ -14,9 +14,8 @@
 import { useForm, FormProvider, type SubmitHandler } from "react-hook-form";
 import CustomInput from "../custom/custom-input/custom-input";
 import './authentication.css';
-import { get, post } from "../../services/api-mothod-service";
-import { useNavigate, useNavigation } from "react-router-dom";
-import { useState } from "react";
+import { post } from "../../services/api-mothod-service";
+import { useNavigate } from "react-router-dom";
 type FormValues = {
     email: string;
     password: string;

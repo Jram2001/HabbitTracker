@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { del, patch, post } from "../../../services/api-mothod-service";
 import { useDialog } from "../../../providers/common-dialog-interface";
 import { EditIcon, TrashIconSolid } from "../../icons.constants";
-import ActionsDropdown from "./actions-dropdown/actions.component";
 import ActivityBox from "./activity-box/activity.component";
 import CircleGraph from "./simpleCircleGraph/circle-graph";
 import "./habbit-card.component.scss";
@@ -11,7 +10,6 @@ type CardInputProps = {
     weeklyActivity: number[];
     yearlyActivity: number[];
     habitId: string;
-    isActive: boolean;
     title: string;
     updateUI: Function;
 };
@@ -19,24 +17,13 @@ type CardInputProps = {
 /**
  * Renders a habit tracking card with activity visualization and interaction
  */
-const HabbitCard: React.FC<CardInputProps> = ({ weeklyActivity, habitId, isActive, yearlyActivity, title, updateUI }) => {
+const HabbitCard: React.FC<CardInputProps> = ({ weeklyActivity, habitId, yearlyActivity, title, updateUI }) => {
     // State and refs
     const cardReference = useRef<HTMLDivElement>(null); // Card element for DOM manipulation
     const [isHovred, setIsHovred] = useState<boolean>(false); // Tracks hover state
     const [expandClass, setExpandClass] = useState<string>(""); // Controls card expansion direction
     const { openDialog, closeDialog } = useDialog(); // Dialog management hooks
     const [graphData, setGrapgData] = useState(yearlyActivity.slice(0, 6));
-
-    // Adjusts card height based on inner content and screen width
-    useEffect(() => {
-        if (cardReference.current) {
-            const innerElement = cardReference.current.querySelector('.habbit-card-container');
-            if (innerElement) {
-                const height = innerElement.getBoundingClientRect().height * (1440 / window.screen.width);
-                // cardReference.current.style.height = `${height}px`;
-            }
-        }
-    }, []);
 
     // Calculates completion percentage from activity array
     const findGraphData = (valuesArray: number[]): number => {
@@ -60,7 +47,7 @@ const HabbitCard: React.FC<CardInputProps> = ({ weeklyActivity, habitId, isActiv
     };
 
     // Deletes habit via API
-    const deleteHabit = (data: any) => {
+    const deleteHabit = () => {
         del('/habbits/deleteHabitData', { habitId })
             .then(() => {
                 updateUI();
@@ -104,7 +91,7 @@ const HabbitCard: React.FC<CardInputProps> = ({ weeklyActivity, habitId, isActiv
             title: 'Deletewarden',
             message: 'Are you sure of deleting this habit',
             onConfirm: (data) => {
-                if (data) deleteHabit(data);
+                if (data) deleteHabit();
                 closeDialog();
             },
             onCancel: closeDialog,

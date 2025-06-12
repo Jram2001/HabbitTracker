@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './repetingtodo.component.scss';
-import { del, get, patch, post } from '../../../services/api-mothod-service';
-import type { getTodoResponse, GetTodosResponse, TodoEntry, TodoItem } from '../../../model/models';
+import { del, get, post } from '../../../services/api-mothod-service';
+import type { TodoEntry, TodoItem } from '../../../model/models';
 import { AddIcon, EditIcon, TrashIcon } from '../../icons.constants';
 import { useDialog } from '../../../providers/common-dialog-interface';
 
@@ -19,7 +19,7 @@ const RepetingTodo: React.FC<{ updateUI: Function }> = ({ updateUI }) => {
 
     const fetchUserTodo = async () => {
         try {
-            const response = await get('/todo/getTodoData', {
+            await get('/todo/getTodoData', {
                 userId: localStorage?.getItem?.('userId')
             }).then((res) => {
                 setTodoData(res.data.data[0]);
@@ -133,8 +133,8 @@ const RepetingTodo: React.FC<{ updateUI: Function }> = ({ updateUI }) => {
             title: 'Deletewarden',
             message: 'Are you sure of deleting this todo',
             onConfirm: (data) => {
-                if (data) deleteHabit(data);
-                closeDialog();
+                if (data) deleteHabit();
+            closeDialog();
                 setTodoData(updatedValue);
                 updateTodo();
             },
@@ -143,7 +143,7 @@ const RepetingTodo: React.FC<{ updateUI: Function }> = ({ updateUI }) => {
     };
 
     // Deletes habit via API
-    const deleteHabit = (data: any) => {
+    const deleteHabit = () => {
         del('/todo/deleteTodo')
             .catch((err) => console.error("Error deleting habit", err));
     };

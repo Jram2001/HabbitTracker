@@ -2,12 +2,11 @@ import type React from "react";
 import HabbitCard from "./habbit-card/habbit-card.component";
 import RepetingTodo from "./repeting-todo/repetingTodo.component";
 import "./home.component.scss"
-import WelcomeUser from "./welcom-section/welcome.component";
 import { useEffect, useState } from "react";
 import { get, post } from "../../services/api-mothod-service";
 import { fillDatesWithFlags } from "../../utils/util";
 import type { ActivityData, AlternativeActivityApiResponse } from "../../model/models";
-import { AddIcon, TrashIconSolid } from "../icons.constants";
+import { AddIcon } from "../icons.constants";
 import { useDialog } from "../../providers/common-dialog-interface";
 
 const Home: React.FC = ({ }) => {
@@ -18,9 +17,7 @@ const Home: React.FC = ({ }) => {
         fetchUserActivity();
     }, []);
 
-    const [hovredIndex, setHovredIndex] = useState<number | null>(null);
-
-    const updateUI = (data?: any) => {
+    const updateUI = () => {
         fetchUserActivity();
     }
 
@@ -86,13 +83,12 @@ const Home: React.FC = ({ }) => {
                         <div>Add habbit</div>
                         <AddIcon color="var(--text-color)" customClassName="actions-icon" strokeSize={4} />
                     </div>
-                    {allUserActivity?.map((activity, index) => {
+                    {allUserActivity?.map((activity) => {
                         return <HabbitCard
                             title={activity.title}
                             weeklyActivity={fillDatesWithFlags(activity.activity, 7)}
                             yearlyActivity={fillDatesWithFlags(activity.activity, 200)}
                             habitId={activity.habitId}
-                            isActive={index == hovredIndex}
                             updateUI={updateUI}
                         />
                     })}

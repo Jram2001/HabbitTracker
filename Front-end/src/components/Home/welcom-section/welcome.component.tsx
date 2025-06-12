@@ -1,5 +1,5 @@
 import { useDialog } from '../../../providers/common-dialog-interface';
-import { patch, post } from '../../../services/api-mothod-service';
+import { post } from '../../../services/api-mothod-service';
 import './welcome.component.scss';
 const WelcomeUser: React.FC<{ userName: string; updateUI: Function }> = ({ userName, updateUI }) => {
     const { openDialog, closeDialog } = useDialog(); // Dialog management hooks
