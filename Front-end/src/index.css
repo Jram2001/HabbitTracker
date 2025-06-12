@@ -48,6 +48,7 @@ body {
   margin: 0;
   transform-origin: top left;
   width: 100%;
+  min-height: 100vh;
   display: flex;
   align-items: start !important;
   place-items: center;
