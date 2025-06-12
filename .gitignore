@@ -9,6 +9,7 @@ lerna-debug.log*
 
 Front-end/node_modules/
 habbit-tracker-backend/node_modules
+habbit-tracker-backend/
 dist-ssr
 *.local
 

@@ -118,7 +118,6 @@ const SignupComponent = () => {
 
         post('/user/signup', { name: data.name, email: userEmail, password: data.password })
             .then(response => {
-                const errValue = response.data.error.value;
                 if (response.data.success) {
                     console.log("Signup successful");
                 } else {
