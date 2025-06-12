@@ -253,7 +253,7 @@ module.exports.validateUser = async (req, res) => {
         // Compare the provided password with the stored hashed password
         const isPasswordValid = await bcrypt.compare(request.password, userData.password);
         if (!isPasswordValid) {
-            return res.status(400).json({ error: 'Invalid email or password' });
+            return res.status(400).json({ error: 'Invalid password' });
         }
 
         // Generate token using the user's actual id and email
