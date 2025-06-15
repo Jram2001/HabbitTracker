@@ -133,9 +133,7 @@ const QuotesComponent: React.FC = () => {
     return (
         <>
             <div className="quote-content">
-                <div className="quote-content">
-                    <span className="large-quote">&ldquo;{randomQuote}<span className="large-quote">&rdquo;</span> </span>
-                </div>
+                <span className="large-quote">&ldquo;{randomQuote}<span className="large-quote">&rdquo;</span> </span>
             </div>
         </>
     )

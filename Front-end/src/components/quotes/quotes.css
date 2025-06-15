@@ -5,6 +5,10 @@
     font-size: 32px;
     font-family: var(--accent-font-family);
     display: flex;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    bottom: 50%;
     align-items: center;
     justify-content: center;
 }
